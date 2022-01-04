@@ -1,0 +1,806 @@
+{
+	"numCarsPerPlayer":45,
+	"deckDistribution":{
+		"RED":12,
+		"ORANGE":12,
+		"YELLOW":12,
+		"GREEN":12,
+		"BLUE":12,
+		"PINK":12,
+		"WHITE":12,
+		"BLACK":12,
+		"WILD":14
+	},
+	"cities":[
+		"VANCOUVER",
+		"CALGARY",
+		"WINNIPEG",
+		"SAULT ST. MARIE",
+		"MONTREAL",
+		"SEATTLE",
+		"HELENA",
+		"DULUTH",
+		"TORONTO",
+		"BOSTON",
+		"PORTLAND",
+		"SALT LAKE CITY",
+		"DENVER",
+		"OMAHA",
+		"CHICAGO",
+		"PITTSBURGH",
+		"NEW YORK",
+		"SAN FRANCISCO",
+		"KANSAS CITY",
+		"SAINT LOUIS",
+		"WASHINGTON",
+		"LOS ANGELES",
+		"LAS VEGAS",
+		"PHOENIX",
+		"SANTA FE",
+		"EL PASO",
+		"OKLAHOMA CITY",
+		"DALLAS",
+		"HOUSTON",
+		"LITTLE ROCK",
+		"NEW ORLEANS",
+		"NASHVILLE",
+		"ATLANTA",
+		"RALEIGH",
+		"CHARLESTON",
+		"MIAMI"
+	],
+	"destinationTickets":[
+		{
+			"START":"BOSTON",
+			"END":"MIAMI",
+			"POINTS":12
+		},
+		{
+			"START":"CALGARY",
+			"END":"PHOENIX",
+			"POINTS":13
+		},
+		{
+			"START":"CALGARY",
+			"END":"SALT LAKE CITY",
+			"POINTS":7
+		},
+		{
+			"START":"CHICAGO",
+			"END":"NEW ORLEANS",
+			"POINTS":7
+		},
+		{
+			"START":"CHICAGO",
+			"END":"SANTE FE",
+			"POINTS":9
+		},
+		{
+			"START":"DALLAS",
+			"END":"NEW YORK",
+			"POINTS":11
+		},
+		{
+			"START":"DENVER",
+			"END":"EL PASO",
+			"POINTS":4
+		},
+		{
+			"START":"DENVER",
+			"END":"PITTSBURGH",
+			"POINTS":11
+		},
+		{
+			"START":"DULUTH",
+			"END":"EL PASO",
+			"POINTS":10
+		},
+		{
+			"START":"DULUTH",
+			"END":"HOUSTON",
+			"POINTS":8
+		},
+		{
+			"START":"HELENA",
+			"END":"LOS ANGELES",
+			"POINTS":8
+		},
+		{
+			"START":"KANSAS CITY",
+			"END":"HOUSTON",
+			"POINTS":5
+		},
+		{
+			"START":"LOS ANGELES",
+			"END":"CHICAGO",
+			"POINTS":16
+		},
+		{
+			"START":"LOS ANGELES",
+			"END":"MIAMI",
+			"POINTS":20
+		},
+		{
+			"START":"LOS ANGELES",
+			"END":"NEW YORK",
+			"POINTS":21
+		},
+		{
+			"START":"MONTREAL",
+			"END":"ATLANTA",
+			"POINTS":9
+		},
+		{
+			"START":"MONTREAL",
+			"END":"NEW ORLEANS",
+			"POINTS":13
+		},
+		{
+			"START":"NEW YORK",
+			"END":"ATLANTA",
+			"POINTS":6
+		},
+		{
+			"START":"PORTLAND",
+			"END":"NASHVILLE",
+			"POINTS":17
+		},
+		{
+			"START":"PORTLAND",
+			"END":"PHOENIX",
+			"POINTS":11
+		},
+		{
+			"START":"SAN FRANCISCO",
+			"END":"ATLANTA",
+			"POINTS":17
+		},
+		{
+			"START":"SAULT ST. MARIE",
+			"END":"NASHVILLE",
+			"POINTS":8
+		},
+		{
+			"START":"SAULT ST. MARIE",
+			"END":"OKLAHOMA CITY",
+			"POINTS":9
+		},
+		{
+			"START":"SEATTLE",
+			"END":"LOS ANGELES",
+			"POINTS":9
+		},
+		{
+			"START":"SEATTLE",
+			"END":"NEW YORK",
+			"POINTS":22
+		},
+		{
+			"START":"TORONTO",
+			"END":"MIAMI",
+			"POINTS":10
+		},
+		{
+			"START":"VANCOUVER",
+			"END":"MONTREAL",
+			"POINTS":20
+		},
+		{
+			"START":"VANCOUVER",
+			"END":"SANTA FE",
+			"POINTS":13
+		},
+		{
+			"START":"WINNIPEG",
+			"END":"HOUSTON",
+			"POINTS":12
+		},
+		{
+			"START":"WINNIPEG",
+			"END":"LITTLE ROCK",
+			"POINTS":11
+		}
+	],
+	"connections":[
+		{
+			"START":"VANCOUVER",
+			"END":"CALGARY",
+			"LENGTH":3,
+			"COLOR":"GRAY"
+		},
+		{
+			"START":"CALGARY",
+			"END":"WINNIPEG",
+			"LENGTH":6,
+			"COLOR":"WHITE"
+		},
+		{
+			"START":"WINNIPEG",
+			"END":"SAULT ST. MARIE",
+			"LENGTH":6,
+			"COLOR":"GRAY"
+		},
+		{
+			"START":"SAULT ST. MARIE",
+			"END":"MONTREAL",
+			"LENGTH":5,
+			"COLOR":"BLACK"
+		},
+		{
+			"START":"MONTREAL",
+			"END":"BOSTON",
+			"LENGTH":2,
+			"COLOR":"GRAY"
+		},
+		{
+			"START":"MONTREAL",
+			"END":"BOSTON",
+			"LENGTH":2,
+			"COLOR":"GRAY"
+		},
+		{
+			"START":"VANCOUVER",
+			"END":"SEATTLE",
+			"LENGTH":1,
+			"COLOR":"GRAY"
+		},
+		{
+			"START":"VANCOUVER",
+			"END":"SEATTLE",
+			"LENGTH":1,
+			"COLOR":"GRAY"
+		},
+		{
+			"START":"SEATTLE",
+			"END":"CALGARY",
+			"LENGTH":4,
+			"COLOR":"GRAY"
+		},
+		{
+			"START":"CALGARY",
+			"END":"HELENA",
+			"LENGTH":4,
+			"COLOR":"GRAY"
+		},
+		{
+			"START":"HELENA",
+			"END":"WINNIPEG",
+			"LENGTH":4,
+			"COLOR":"BLUE"
+		},
+		{
+			"START":"WINNIPEG",
+			"END":"DULUTH",
+			"LENGTH":4,
+			"COLOR":"BLACK"
+		},
+		{
+			"START":"DULUTH",
+			"END":"SAULT ST. MARIE",
+			"LENGTH":3,
+			"COLOR":"GRAY"
+		},
+		{
+			"START":"SAULT ST. MARIE",
+			"END":"TORONTO",
+			"LENGTH":2,
+			"COLOR":"GRAY"
+		},
+		{
+			"START":"TORONTO",
+			"END":"MONTREAL",
+			"LENGTH":3,
+			"COLOR":"GRAY"
+		},
+		{
+			"START":"SEATTLE",
+			"END":"HELENA",
+			"LENGTH":6,
+			"COLOR":"YELLOW"
+		},
+		{
+			"START":"HELENA",
+			"END":"DULUTH",
+			"LENGTH":6,
+			"COLOR":"ORANGE"
+		},
+		{
+			"START":"DULUTH",
+			"END":"TORONTO",
+			"LENGTH":6,
+			"COLOR":"PINK"
+		},
+		{
+			"START":"MONTREAL",
+			"END":"NEW YORK",
+			"LENGTH":3,
+			"COLOR":"BLUE"
+		},
+		{
+			"START":"BOSTON",
+			"END":"NEW YORK",
+			"LENGTH":2,
+			"COLOR":"YELLOW"
+		},
+		{
+			"START":"BOSTON",
+			"END":"NEW YORK",
+			"LENGTH":2,
+			"COLOR":"RED"
+		},
+		{
+			"START":"SEATTLE",
+			"END":"PORTLAND",
+			"LENGTH":1,
+			"COLOR":"GRAY"
+		},
+		{
+			"START":"SEATTLE",
+			"END":"PORTLAND",
+			"LENGTH":1,
+			"COLOR":"GRAY"
+		},
+		{
+			"START":"PORTLAND",
+			"END":"SALT LAKE CITY",
+			"LENGTH":6,
+			"COLOR":"BLUE"
+		},
+		{
+			"START":"SALT LAKE CITY",
+			"END":"HELENA",
+			"LENGTH":3,
+			"COLOR":"PINK"
+		},
+		{
+			"START":"HELENA",
+			"END":"OMAHA",
+			"LENGTH":5,
+			"COLOR":"RED"
+		},
+		{
+			"START":"HELENA",
+			"END":"DENVER",
+			"LENGTH":4,
+			"COLOR":"GREEN"
+		},
+		{
+			"START":"DULUTH",
+			"END":"OMAHA",
+			"LENGTH":2,
+			"COLOR":"GRAY"
+		},
+		{
+			"START":"DULUTH",
+			"END":"OMAHA",
+			"LENGTH":2,
+			"COLOR":"GRAY"
+		},
+		{
+			"START":"DULUTH",
+			"END":"CHICAGO",
+			"LENGTH":3,
+			"COLOR":"RED"
+		},
+		{
+			"START":"CHICAGO",
+			"END":"TORONTO",
+			"LENGTH":4,
+			"COLOR":"WHITE"
+		},
+		{
+			"START":"TORONTO",
+			"END":"PITTSBURGH",
+			"LENGTH":2,
+			"COLOR":"GRAY"
+		},
+		{
+			"START":"CHICAGO",
+			"END":"PITTSBURGH",
+			"LENGTH":3,
+			"COLOR":"ORANGE"
+		},
+		{
+			"START":"CHICAGO",
+			"END":"PITTSBURGH",
+			"LENGTH":3,
+			"COLOR":"BLACK"
+		},
+		{
+			"START":"PITTSBURGH",
+			"END":"NEW YORK",
+			"LENGTH":2,
+			"COLOR":"WHITE"
+		},
+		{
+			"START":"PITTSBURGH",
+			"END":"NEW YORK",
+			"LENGTH":2,
+			"COLOR":"GREEN"
+		},
+		{
+			"START":"PORTLAND",
+			"END":"SAN FRANCISCO",
+			"LENGTH":5,
+			"COLOR":"GREEN"
+		},
+		{
+			"START":"PORTLAND",
+			"END":"SAN FRANCISCO",
+			"LENGTH":5,
+			"COLOR":"PINK"
+		},
+		{
+			"START":"SAN FRANCISCO",
+			"END":"SALT LAKE CITY",
+			"LENGTH":5,
+			"COLOR":"ORANGE"
+		},
+		{
+			"START":"SAN FRANCISCO",
+			"END":"SALT LAKE CITY",
+			"LENGTH":5,
+			"COLOR":"WHITE"
+		},
+		{
+			"START":"SALT LAKE CITY",
+			"END":"DENVER",
+			"LENGTH":3,
+			"COLOR":"RED"
+		},
+		{
+			"START":"SALT LAKE CITY",
+			"END":"DENVER",
+			"LENGTH":3,
+			"COLOR":"YELLOW"
+		},
+		{
+			"START":"DENVER",
+			"END":"OMAHA",
+			"LENGTH":4,
+			"COLOR":"PINK"
+		},
+		{
+			"START":"OMAHA",
+			"END":"CHICAGO",
+			"LENGTH":4,
+			"COLOR":"BLUE"
+		},
+		{
+			"START":"OMAHA",
+			"END":"KANSAS CITY",
+			"LENGTH":1,
+			"COLOR":"GRAY"
+		},
+		{
+			"START":"OMAHA",
+			"END":"KANSAS CITY",
+			"LENGTH":1,
+			"COLOR":"GRAY"
+		},
+		{
+			"START":"DENVER",
+			"END":"KANSAS CITY",
+			"LENGTH":4,
+			"COLOR":"BLACK"
+		},
+		{
+			"START":"DENVER",
+			"END":"KANSAS CITY",
+			"LENGTH":4,
+			"COLOR":"ORANGE"
+		},
+		{
+			"START":"KANSAS CITY",
+			"END":"SAINT LOUIS",
+			"LENGTH":2,
+			"COLOR":"BLUE"
+		},
+		{
+			"START":"KANSAS CITY",
+			"END":"SAINT LOUIS",
+			"LENGTH":2,
+			"COLOR":"PINK"
+		},
+		{
+			"START":"CHICAGO",
+			"END":"SAINT LOUIS",
+			"LENGTH":2,
+			"COLOR":"GREEN"
+		},
+		{
+			"START":"CHICAGO",
+			"END":"SAINT LOUIS",
+			"LENGTH":2,
+			"COLOR":"WHITE"
+		},
+		{
+			"START":"SAINT LOUIS",
+			"END":"PITTSBURGH",
+			"LENGTH":5,
+			"COLOR":"GREEN"
+		},
+		{
+			"START":"NEW YORK",
+			"END":"WASHINGTON",
+			"LENGTH":2,
+			"COLOR":"ORANGE"
+		},
+		{
+			"START":"NEW YORK",
+			"END":"WASHINGTON",
+			"LENGTH":2,
+			"COLOR":"BLACK"
+		},
+		{
+			"START":"PITTSBURGH",
+			"END":"WASHINGTON",
+			"LENGTH":2,
+			"COLOR":"GRAY"
+		},
+		{
+			"START":"SAN FRANCISCO",
+			"END":"LOS ANGELES",
+			"LENGTH":3,
+			"COLOR":"YELLOW"
+		},
+		{
+			"START":"SAN FRANCISCO",
+			"END":"LOS ANGELES",
+			"LENGTH":3,
+			"COLOR":"PINK"
+		},
+		{
+			"START":"LOS ANGELES",
+			"END":"LAS VEGAS",
+			"LENGTH":2,
+			"COLOR":"GRAY"
+		},
+		{
+			"START":"LAS VEGAS",
+			"END":"SALT LAKE CITY",
+			"LENGTH":3,
+			"COLOR":"ORANGE"
+		},
+		{
+			"START":"LOS ANGELES",
+			"END":"PHOENIX",
+			"LENGTH":3,
+			"COLOR":"GRAY"
+		},
+		{
+			"START":"LOS ANGELES",
+			"END":"EL PASO",
+			"LENGTH":6,
+			"COLOR":"BLACK"
+		},
+		{
+			"START":"PHOENIX",
+			"END":"DENVER",
+			"LENGTH":5,
+			"COLOR":"WHITE"
+		},
+		{
+			"START":"PHOENIX",
+			"END":"EL PASO",
+			"LENGTH":3,
+			"COLOR":"GRAY"
+		},
+		{
+			"START":"PHOENIX",
+			"END":"SANTA FE",
+			"LENGTH":3,
+			"COLOR":"GRAY"
+		},
+		{
+			"START":"DENVER",
+			"END":"SANTA FE",
+			"LENGTH":2,
+			"COLOR":"GRAY"
+		},
+		{
+			"START":"SANTA FE",
+			"END":"EL PASO",
+			"LENGTH":2,
+			"COLOR":"GRAY"
+		},
+		{
+			"START":"DENVER",
+			"END":"OKLAHOMA CITY",
+			"LENGTH":4,
+			"COLOR":"RED"
+		},
+		{
+			"START":"SANTA FE",
+			"END":"OKLAHOMA CITY",
+			"LENGTH":3,
+			"COLOR":"BLUE"
+		},
+		{
+			"START":"EL PASO",
+			"END":"OKLAHOMA CITY",
+			"LENGTH":5,
+			"COLOR":"YELLOW"
+		},
+		{
+			"START":"EL PASO",
+			"END":"HOUSTON",
+			"LENGTH":6,
+			"COLOR":"GREEN"
+		},
+		{
+			"START":"EL PASO",
+			"END":"DALLAS",
+			"LENGTH":4,
+			"COLOR":"RED"
+		},
+		{
+			"START":"KANSAS CITY",
+			"END":"OKLAHOMA CITY",
+			"LENGTH":2,
+			"COLOR":"GRAY"
+		},
+		{
+			"START":"KANSAS CITY",
+			"END":"OKLAHOMA CITY",
+			"LENGTH":2,
+			"COLOR":"GRAY"
+		},
+		{
+			"START":"OKLAHOMA CITY",
+			"END":"DALLAS",
+			"LENGTH":2,
+			"COLOR":"GRAY"
+		},
+		{
+			"START":"OKLAHOMA CITY",
+			"END":"DALLAS",
+			"LENGTH":2,
+			"COLOR":"GRAY"
+		},
+		{
+			"START":"DALLAS",
+			"END":"HOUSTON",
+			"LENGTH":1,
+			"COLOR":"GRAY"
+		},
+		{
+			"START":"DALLAS",
+			"END":"HOUSTON",
+			"LENGTH":1,
+			"COLOR":"GRAY"
+		},
+		{
+			"START":"OKLAHOMA CITY",
+			"END":"LITTLE ROCK",
+			"LENGTH":2,
+			"COLOR":"GRAY"
+		},
+		{
+			"START":"DALLAS",
+			"END":"LITTLE ROCK",
+			"LENGTH":2,
+			"COLOR":"GRAY"
+		},
+		{
+			"START":"HOUSTON",
+			"END":"NEW ORLEANS",
+			"LENGTH":2,
+			"COLOR":"GRAY"
+		},
+		{
+			"START":"SAINT LOUIS",
+			"END":"LITTLE ROCK",
+			"LENGTH":2,
+			"COLOR":"GRAY"
+		},
+		{
+			"START":"LITTLE ROCK",
+			"END":"NEW ORLEANS",
+			"LENGTH":3,
+			"COLOR":"GREEN"
+		},
+		{
+			"START":"SAINT LOUIS",
+			"END":"NASHVILLE",
+			"LENGTH":2,
+			"COLOR":"GRAY"
+		},
+		{
+			"START":"LITTLE ROCK",
+			"END":"NASHVILLE",
+			"LENGTH":3,
+			"COLOR":"WHITE"
+		},
+		{
+			"START":"PITTSBURGH",
+			"END":"NASHVILLE",
+			"LENGTH":4,
+			"COLOR":"YELLOW"
+		},
+		{
+			"START":"PITTSBURGH",
+			"END":"RALEIGH",
+			"LENGTH":2,
+			"COLOR":"GRAY"
+		},
+		{
+			"START":"NASHVILLE",
+			"END":"RALEIGH",
+			"LENGTH":3,
+			"COLOR":"BLACK"
+		},
+		{
+			"START":"NASHVILLE",
+			"END":"ATLANTA",
+			"LENGTH":1,
+			"COLOR":"GRAY"
+		},
+		{
+			"START":"NEW ORLEANS",
+			"END":"ATLANTA",
+			"LENGTH":4,
+			"COLOR":"YELLOW"
+		},
+		{
+			"START":"NEW ORLEANS",
+			"END":"ATLANTA",
+			"LENGTH":4,
+			"COLOR":"ORANGE"
+		},
+		{
+			"START":"ATLANTA",
+			"END":"RALEIGH",
+			"LENGTH":2,
+			"COLOR":"GRAY"
+		},
+		{
+			"START":"ATLANTA",
+			"END":"RALEIGH",
+			"LENGTH":2,
+			"COLOR":"GRAY"
+		},
+		{
+			"START":"RALEIGH",
+			"END":"WASHINGTON",
+			"LENGTH":2,
+			"COLOR":"GRAY"
+		},
+		{
+			"START":"RALEIGH",
+			"END":"WASHINGTON",
+			"LENGTH":2,
+			"COLOR":"GRAY"
+		},
+		{
+			"START":"RALEIGH",
+			"END":"CHARLESTON",
+			"LENGTH":2,
+			"COLOR":"GRAY"
+		},
+		{
+			"START":"ATLANTA",
+			"END":"CHARLESTON",
+			"LENGTH":2,
+			"COLOR":"GRAY"
+		},
+		{
+			"START":"NEW ORLEANS",
+			"END":"MIAMI",
+			"LENGTH":6,
+			"COLOR":"RED"
+		},
+		{
+			"START":"ATLANTA",
+			"END":"MIAMI",
+			"LENGTH":5,
+			"COLOR":"BLUE"
+		},
+		{
+			"START":"CHARLESTON",
+			"END":"MIAMI",
+			"LENGTH":4,
+			"COLOR":"PINK"
+		},
+	]
+}
