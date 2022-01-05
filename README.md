@@ -24,3 +24,7 @@ The game components shall be defined in a JSON file as follows:
 	- point value
 
 - List of connections (using the predefined city and color names, plus the GRAY color)
+
+- Points values of awards at the end of the game
+	- LONGEST ROUTE
+	- GLOBETROTTER

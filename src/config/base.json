@@ -802,5 +802,9 @@
 			"LENGTH":4,
 			"COLOR":"PINK"
 		}
-	]
+	],
+	"awards":{
+		"LONGEST ROUTE":10,
+		"GLOBETROTTER":15
+	}
 }
