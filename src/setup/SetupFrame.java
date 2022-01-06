@@ -1,6 +1,7 @@
 package setup;
 
 import java.awt.BorderLayout;
+import java.io.File;
 
 import javax.swing.JFrame;
 
@@ -25,10 +26,13 @@ public class SetupFrame extends JFrame {
 	}
 
 	static void startGame() {
-		// TODO
-		System.out.println("There are " + numPlayersPanel.getNumPlayers() + " players");
-		System.out.println("Longest Route: " + awardsPanel.isLongestRouteEnabled());
-		System.out.println("Globetrotter: " + awardsPanel.isGlobetrotterEnabled());
-		System.out.println("Config File: " + fileChooserPanel.getConfigFile());
+		final int numPlayers = numPlayersPanel.getNumPlayers();
+		final boolean isLongestRouteEnabled = awardsPanel.isLongestRouteEnabled();
+		final boolean isGlobetrotterEnabled = awardsPanel.isGlobetrotterEnabled();
+		final File configFile = fileChooserPanel.getConfigFile();
+
+		final GameConfig gameConfig = new GameConfig(numPlayers, isLongestRouteEnabled, isGlobetrotterEnabled,
+				configFile);
+		gameConfig.startDriver();
 	}
 }
