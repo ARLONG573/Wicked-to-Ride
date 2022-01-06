@@ -45,6 +45,10 @@ class FileChooserPanel extends JPanel {
 		this.configFile = null;
 	}
 
+	File getConfigFile() {
+		return this.configFile;
+	}
+
 	private void selectConfigFile() {
 		final JFileChooser fileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
 		final int returnValue = fileChooser.showOpenDialog(null);
