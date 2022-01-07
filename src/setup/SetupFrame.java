@@ -13,7 +13,9 @@ public class SetupFrame extends JFrame {
 	private static final AwardsPanel awardsPanel = new AwardsPanel();
 	private static final FileChooserPanel fileChooserPanel = new FileChooserPanel();
 
-	public SetupFrame() {
+	private static SetupFrame theInstance = null;
+
+	private SetupFrame() {
 		super("Game Setup");
 
 		super.add(numPlayersPanel, BorderLayout.NORTH);
@@ -25,7 +27,15 @@ public class SetupFrame extends JFrame {
 		super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
-	static void startGame() {
+	public static SetupFrame getInstance() {
+		if (theInstance == null) {
+			theInstance = new SetupFrame();
+		}
+
+		return theInstance;
+	}
+
+	void startGame() {
 		final int numPlayers = numPlayersPanel.getNumPlayers();
 		final boolean isLongestRouteEnabled = awardsPanel.isLongestRouteEnabled();
 		final boolean isGlobetrotterEnabled = awardsPanel.isGlobetrotterEnabled();
@@ -34,5 +44,7 @@ public class SetupFrame extends JFrame {
 		final GameConfig gameConfig = new GameConfig(numPlayers, isLongestRouteEnabled, isGlobetrotterEnabled,
 				configFile);
 		gameConfig.startDriver();
+		
+		super.dispose();
 	}
 }

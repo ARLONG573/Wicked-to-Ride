@@ -38,7 +38,7 @@ class FileChooserPanel extends JPanel {
 
 		this.startButton = new JButton("Start");
 		this.startButton.addActionListener((e) -> {
-			SetupFrame.startGame();
+			SetupFrame.getInstance().startGame();
 		});
 		super.add(this.startButton);
 
