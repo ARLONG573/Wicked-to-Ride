@@ -28,12 +28,6 @@ public class GameConfig {
 	}
 
 	void startDriver() {
-		// DONE number of players (int)
-		// DONE number of cars per player (long)
-		// starting color deck (ColorDeck - wraps a map)
-		// starting destination ticket deck (DestinationTicketDeck - wraps a list)
-		// board (Board - wraps a graph)
-		// DONE point value of awards (int, int)
 		JSONObject obj = null;
 		try {
 			obj = (JSONObject) new JSONParser().parse(new FileReader(this.configFile));
