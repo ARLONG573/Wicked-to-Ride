@@ -12,6 +12,7 @@ import org.json.simple.parser.ParseException;
 
 import data.DestinationTicket;
 import driver.GameDriver;
+import state.Board;
 import state.ColorDeck;
 import state.DestinationTicketDeck;
 
@@ -55,8 +56,8 @@ public class GameConfig {
 		// destination ticket deck
 		final DestinationTicketDeck destinationTicketDeck = new DestinationTicketDeck();
 
-		final JSONArray array = (JSONArray) obj.get("destinationTickets");
-		for (final Object destinationTicketObj : array) {
+		final JSONArray destinationTicketArray = (JSONArray) obj.get("destinationTickets");
+		for (final Object destinationTicketObj : destinationTicketArray) {
 			final JSONObject destinationTicketJSONObj = (JSONObject) destinationTicketObj;
 
 			final String start = (String) destinationTicketJSONObj.get("START");
@@ -68,14 +69,26 @@ public class GameConfig {
 		}
 
 		// board
-		// TODO
+		final Board board = new Board();
+
+		final JSONArray connectionsArray = (JSONArray) obj.get("connections");
+		for (final Object connectionObj : connectionsArray) {
+			final JSONObject connectionJSONObj = (JSONObject) connectionObj;
+
+			final String start = (String) connectionJSONObj.get("START");
+			final String end = (String) connectionJSONObj.get("END");
+			final long length = (Long) connectionJSONObj.get("LENGTH");
+			final String color = (String) connectionJSONObj.get("COLOR");
+
+			board.addConnection(start, end, length, color);
+		}
 
 		// points for awards
 		final Map<String, Long> awardsMap = (Map<String, Long>) obj.get("awards");
 		final long longestRoutePoints = this.isLongestRouteEnabled ? awardsMap.get("LONGEST ROUTE") : 0;
 		final long globetrotterPoints = this.isGlobetrotterEnabled ? awardsMap.get("GLOBETROTTER") : 0;
 
-		GameDriver.runGame(this.numPlayers, numCarsPerPlayer, colorDeck, destinationTicketDeck, null,
+		GameDriver.runGame(this.numPlayers, numCarsPerPlayer, colorDeck, destinationTicketDeck, board,
 				longestRoutePoints, globetrotterPoints);
 	}
 }

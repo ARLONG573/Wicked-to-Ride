@@ -10,6 +10,6 @@ public class GameDriver {
 			final DestinationTicketDeck destinationTicketDeck, final Board board, final long longestRoutePoints,
 			final long globetrotterPoints) {
 
-		System.out.println("Hello!");
+		System.out.println("Hello World!");
 	}
 }
