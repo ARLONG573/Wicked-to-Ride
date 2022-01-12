@@ -50,7 +50,7 @@ public class GameConfig {
 		final ColorDeck colorDeck = new ColorDeck();
 
 		for (final Map.Entry<String, Long> entry : colorsMap.entrySet()) {
-			colorDeck.setColor(entry.getKey(), entry.getValue());
+			colorDeck.initColor(entry.getKey(), entry.getValue());
 		}
 
 		// destination ticket deck
@@ -65,7 +65,7 @@ public class GameConfig {
 			final long points = (Long) destinationTicketJSONObj.get("POINTS");
 
 			final DestinationTicket destinationTicket = new DestinationTicket(start, end, points);
-			destinationTicketDeck.addDestinationTicket(destinationTicket);
+			destinationTicketDeck.initDestinationTicket(destinationTicket);
 		}
 
 		// board

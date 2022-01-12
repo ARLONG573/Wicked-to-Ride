@@ -1,13 +1,23 @@
 package state;
 
 import java.util.HashMap;
+import java.util.Map;
 
-public class ColorDeck extends HashMap<String, Long> {
+public class ColorDeck {
 
-	private static final long serialVersionUID = 1L;
+	private final Map<String, Long> seen;
+	private final Map<String, Long> unseen;
+	private long numCardsInDrawPile;
 
-	public void setColor(final String color, final long count) {
-		super.put(color, count);
+	public ColorDeck() {
+		this.seen = new HashMap<>();
+		this.unseen = new HashMap<>();
+		this.numCardsInDrawPile = 0;
+	}
+
+	public void initColor(final String color, final long count) {
+		this.unseen.put(color, count);
+		this.numCardsInDrawPile += count;
 	}
 
 }
