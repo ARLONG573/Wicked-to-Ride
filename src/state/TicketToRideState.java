@@ -9,12 +9,17 @@ public class TicketToRideState implements GameState {
 	public TicketToRideState(final int numPlayers, final long numCarsPerPlayer, final ColorDeck colorDeck,
 			final DestinationTicketDeck destinationTicketDeck, final Board board, final long longestRoutePoints,
 			final long globetrotterPoints) {
-
+		// TODO
+		this.dealStartingHands();
 	}
 
 	public int getCurrentPlayer() {
 		// TODO
 		return 0;
+	}
+
+	private void dealStartingHands() {
+		// TODO
 	}
 
 	@Override
