@@ -2,7 +2,7 @@ package state;
 
 import java.util.List;
 
-import api.GameState;
+import mcts.api.GameState;
 
 public class TicketToRideState implements GameState {
 

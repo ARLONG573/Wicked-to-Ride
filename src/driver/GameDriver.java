@@ -2,6 +2,7 @@ package driver;
 
 import java.util.Scanner;
 
+import mcts.MCTS;
 import state.Board;
 import state.ColorDeck;
 import state.DestinationTicketDeck;
@@ -28,7 +29,7 @@ public class GameDriver {
 			// AI turn
 			if (gameState.getCurrentPlayer() == aiPlayer) {
 				System.out.println("AI is thinking...");
-				gameState = (TicketToRideState) MCTS.search(30, 1);
+				gameState = (TicketToRideState) MCTS.search(gameState, 30, 1);
 				System.out.println(gameState);
 			}
 			// Get human turn
