@@ -6,6 +6,17 @@ import api.GameState;
 
 public class TicketToRideState implements GameState {
 
+	public TicketToRideState(final int numPlayers, final long numCarsPerPlayer, final ColorDeck colorDeck,
+			final DestinationTicketDeck destinationTicketDeck, final Board board, final long longestRoutePoints,
+			final long globetrotterPoints) {
+
+	}
+
+	public int getCurrentPlayer() {
+		// TODO
+		return 0;
+	}
+
 	@Override
 	public int getLastPlayer() {
 		// TODO Auto-generated method stub
@@ -30,4 +41,9 @@ public class TicketToRideState implements GameState {
 		return null;
 	}
 
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
