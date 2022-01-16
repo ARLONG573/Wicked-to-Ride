@@ -2,6 +2,7 @@ package state;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 public class ColorDeck {
 
@@ -20,5 +21,14 @@ public class ColorDeck {
 	public void initColor(final String color, final long count) {
 		this.possiblyInDeck.put(color, count);
 		this.numCardsInDrawPile += count;
+	}
+
+	public void dealStartingFourToPlayer(final Player player) {
+		this.numCardsInDrawPile -= 4;
+		player.addUnknownColorCards(4);
+	}
+
+	public void dealStartingFiveFaceUp(final Scanner in) {
+		// TODO
 	}
 }

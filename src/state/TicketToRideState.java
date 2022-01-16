@@ -7,37 +7,68 @@ import mcts.api.GameState;
 
 public class TicketToRideState implements GameState {
 
-	public TicketToRideState(final int numPlayers, final long numCarsPerPlayer, final ColorDeck colorDeck,
-			final DestinationTicketDeck destinationTicketDeck, final Board board, final long longestRoutePoints,
-			final long globetrotterPoints) {
+	private final Player[] players;
+	private final ColorDeck colorDeck;
+	private final DestinationTicketDeck destinationTicketDeck;
+	private final Board board;
+	private final long longestRoutePoints;
+	private final long globetrotterPoints;
+
+	private int lastPlayerIndex;
+	private int currentPlayerIndex;
+
+	public TicketToRideState(final int numPlayers, final int aiPlayerIndex, final long numCarsPerPlayer,
+			final ColorDeck colorDeck, final DestinationTicketDeck destinationTicketDeck, final Board board,
+			final long longestRoutePoints, final long globetrotterPoints) {
+
+		this.players = new Player[numPlayers];
+		for (int i = 0; i < numPlayers; i++) {
+			this.players[i] = new Player(numCarsPerPlayer);
+		}
+
+		this.colorDeck = colorDeck;
+		this.destinationTicketDeck = destinationTicketDeck;
+		this.board = board;
+		this.longestRoutePoints = longestRoutePoints;
+		this.globetrotterPoints = globetrotterPoints;
+
+		this.lastPlayerIndex = -1;
+
+		// This makes sure that the AI knows to pick destination tickets at the start of
+		// the game
+		this.currentPlayerIndex = aiPlayerIndex;
+	}
+
+	public void dealStartingHands(final int aiPlayerIndex, final Scanner in) {
+		// Color cards
+		for (final Player player : this.players) {
+			this.colorDeck.dealStartingFourToPlayer(player);
+		}
+		this.colorDeck.dealStartingFiveFaceUp(in);
+
+		// Destination tickets
+		for (final Player player : this.players) {
+			this.destinationTicketDeck.dealStartingThreeToPlayer(player);
+		}
+
+		this.resolveUnknownsForAI(aiPlayerIndex, in);
+	}
+
+	public void resolveUnknownsForAI(final int aiPlayerIndex, final Scanner in) {
 		// TODO
-		this.dealStartingHands();
+	}
+
+	public void printPlayerInfo(final int playerIndex) {
+		// TODO
+	}
+
+	public void getNumDestinationTicketsForHumanPlayers(final Scanner in) {
+		// TODO
 	}
 
 	public int getCurrentPlayer() {
 		// TODO
 		return 0;
-	}
-
-	/**
-	 * This method is called after the AI takes its turn. There are 3 possible ways
-	 * that this function resolves:
-	 * 
-	 * If the AI just took a connection, then no resolution is required. If the AI
-	 * just took some destination tickets, then the destination tickets that were
-	 * drawn need to be input by the user. If the AI just took 2 color cards from
-	 * the top of the deck, then the color cards that were drawn need to be input by
-	 * the user.
-	 * 
-	 * @param aiPlayerIndex The index of the AI in the players array
-	 * @param in            The scanner used to read in color cards, if necessary
-	 */
-	public void resolveUnknownsForAI(final int aiPlayerIndex, final Scanner in) {
-		// TODO
-	}
-
-	private void dealStartingHands() {
-		// TODO
 	}
 
 	@Override

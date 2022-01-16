@@ -21,8 +21,14 @@ public class GameDriver {
 		final int aiPlayer = in.nextInt();
 
 		// Create initial game state
-		TicketToRideState gameState = new TicketToRideState(numPlayers, numCarsPerPlayer, colorDeck,
+		TicketToRideState gameState = new TicketToRideState(numPlayers, aiPlayer, numCarsPerPlayer, colorDeck,
 				destinationTicketDeck, board, longestRoutePoints, globetrotterPoints);
+		gameState.dealStartingHands(aiPlayer, in);
+
+		// AI needs to figure out which destination tickets to keep
+		gameState = (TicketToRideState) MCTS.search(gameState, 30, 1);
+		gameState.printPlayerInfo(aiPlayer);
+		gameState.getNumDestinationTicketsForHumanPlayers(in);
 
 		// Game loop
 		while (gameState.getWinningPlayers().isEmpty()) {
@@ -31,10 +37,12 @@ public class GameDriver {
 				System.out.println("AI is thinking...");
 				gameState = (TicketToRideState) MCTS.search(gameState, 30, 1);
 				gameState.resolveUnknownsForAI(aiPlayer, in);
+				gameState.printPlayerInfo(aiPlayer);
 			}
 			// Get human turn
 			else {
-
+				// TODO
+				gameState.printPlayerInfo(gameState.getLastPlayer());
 			}
 		}
 

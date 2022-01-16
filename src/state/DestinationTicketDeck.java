@@ -21,4 +21,9 @@ public class DestinationTicketDeck {
 		this.possiblyInDeck.add(destinationTicket);
 		this.numCardsInDrawPile++;
 	}
+
+	public void dealStartingThreeToPlayer(final Player player) {
+		this.numCardsInDrawPile -= 3;
+		player.addUnknownDestinationTickets(3);
+	}
 }
