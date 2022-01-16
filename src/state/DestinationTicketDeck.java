@@ -26,4 +26,8 @@ public class DestinationTicketDeck {
 		this.numCardsInDrawPile -= 3;
 		player.addUnknownDestinationTickets(3);
 	}
+
+	public void removeCardFromDeckPossiblility(final DestinationTicket ticket) {
+		this.possiblyInDeck.remove(ticket);
+	}
 }

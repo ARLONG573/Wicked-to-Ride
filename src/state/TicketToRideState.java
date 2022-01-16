@@ -3,6 +3,7 @@ package state;
 import java.util.List;
 import java.util.Scanner;
 
+import data.DestinationTicket;
 import mcts.api.GameState;
 
 public class TicketToRideState implements GameState {
@@ -51,11 +52,29 @@ public class TicketToRideState implements GameState {
 			this.destinationTicketDeck.dealStartingThreeToPlayer(player);
 		}
 
-		this.resolveUnknownsForAI(aiPlayerIndex, in);
+		this.resolveUnknownsForPlayerManually(aiPlayerIndex, in);
 	}
 
-	public void resolveUnknownsForAI(final int aiPlayerIndex, final Scanner in) {
-		// TODO
+	public void resolveUnknownsForPlayerManually(final int playerIndex, final Scanner in) {
+		final Player player = this.players[playerIndex];
+
+		// Color cards
+		final int numUnknownColorCards = player.getNumUnknownColorCards();
+		for (int i = 1; i <= numUnknownColorCards; i++) {
+			System.out.println("Drawn color card " + i + ": ");
+			final String color = in.next().toUpperCase();
+
+			player.convertUnknownColorCardToKnownManually(color, this.colorDeck);
+		}
+
+		// Destination tickets
+		final int numUnknownDestinationTickets = player.getNumUnknownDestinationTickets();
+		for (int i = 1; i < numUnknownDestinationTickets; i++) {
+			// TODO a GUI way to get a destination ticket
+			final DestinationTicket ticket = null;
+
+			player.convertUnknownDestinationTicketToKnownManually(ticket, this.destinationTicketDeck);
+		}
 	}
 
 	public void printPlayerInfo(final int playerIndex) {
@@ -67,14 +86,12 @@ public class TicketToRideState implements GameState {
 	}
 
 	public int getCurrentPlayer() {
-		// TODO
-		return 0;
+		return this.currentPlayerIndex;
 	}
 
 	@Override
 	public int getLastPlayer() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.lastPlayerIndex;
 	}
 
 	@Override

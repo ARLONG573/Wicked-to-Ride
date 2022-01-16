@@ -43,8 +43,7 @@ public class SetupFrame extends JFrame {
 
 		final GameConfig gameConfig = new GameConfig(numPlayers, isLongestRouteEnabled, isGlobetrotterEnabled,
 				configFile);
-		gameConfig.startDriver();
-		
 		super.dispose();
+		gameConfig.startDriver();
 	}
 }

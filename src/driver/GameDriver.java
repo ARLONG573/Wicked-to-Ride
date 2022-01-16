@@ -26,6 +26,7 @@ public class GameDriver {
 		gameState.dealStartingHands(aiPlayer, in);
 
 		// AI needs to figure out which destination tickets to keep
+		System.out.println("AI is thinking...");
 		gameState = (TicketToRideState) MCTS.search(gameState, 30, 1);
 		gameState.printPlayerInfo(aiPlayer);
 		gameState.getNumDestinationTicketsForHumanPlayers(in);
@@ -36,7 +37,7 @@ public class GameDriver {
 			if (gameState.getCurrentPlayer() == aiPlayer) {
 				System.out.println("AI is thinking...");
 				gameState = (TicketToRideState) MCTS.search(gameState, 30, 1);
-				gameState.resolveUnknownsForAI(aiPlayer, in);
+				gameState.resolveUnknownsForPlayerManually(aiPlayer, in);
 				gameState.printPlayerInfo(aiPlayer);
 			}
 			// Get human turn

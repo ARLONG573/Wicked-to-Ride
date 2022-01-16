@@ -23,6 +23,11 @@ public class Player {
 		this.numUnknownDestinationTickets = 0;
 		this.numCarsRemaining = numStartingCars;
 		this.score = 0;
+
+		// initializing color mappings now will make things easier later
+		for (final String color : ColorDeck.COLORS) {
+			this.knownColorCards.put(color, 0);
+		}
 	}
 
 	public void addUnknownColorCards(final int numCards) {
@@ -31,5 +36,27 @@ public class Player {
 
 	public void addUnknownDestinationTickets(final int numTickets) {
 		this.numUnknownDestinationTickets += numTickets;
+	}
+
+	public void convertUnknownColorCardToKnownManually(final String color, final ColorDeck deck) {
+		this.numUnknownColorCards--;
+		this.knownColorCards.put(color, this.knownColorCards.get(color) + 1);
+		deck.removeCardFromDeckPossibility(color);
+	}
+
+	public void convertUnknownDestinationTicketToKnownManually(final DestinationTicket ticket,
+			final DestinationTicketDeck deck) {
+		
+		this.numUnknownDestinationTickets --;
+		this.knownDestinationTickets.add(ticket);
+		deck.removeCardFromDeckPossiblility(ticket);
+	}
+
+	public int getNumUnknownColorCards() {
+		return this.numUnknownColorCards;
+	}
+
+	public int getNumUnknownDestinationTickets() {
+		return this.numUnknownDestinationTickets;
 	}
 }
