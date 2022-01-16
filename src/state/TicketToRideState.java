@@ -18,6 +18,22 @@ public class TicketToRideState implements GameState {
 		return 0;
 	}
 
+	/**
+	 * This method is called after the AI takes its turn. There are 3 possible ways
+	 * that this function resolves:
+	 * 
+	 * If the AI just took a connection, then no resolution is required. If the AI
+	 * just took some destination tickets, then the destination tickets that were
+	 * drawn need to be input by the user. If the AI just took 2 color cards from
+	 * the top of the deck, then the color cards that were drawn need to be input by
+	 * the user.
+	 * 
+	 * @param aiPlayerIndex The index of the AI in the players array
+	 */
+	public void resolveUnknownsForAI(final int aiPlayerIndex) {
+		// TODO
+	}
+
 	private void dealStartingHands() {
 		// TODO
 	}
@@ -42,12 +58,6 @@ public class TicketToRideState implements GameState {
 
 	@Override
 	public List<Integer> getWinningPlayers() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String toString() {
 		// TODO Auto-generated method stub
 		return null;
 	}
