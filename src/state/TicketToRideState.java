@@ -1,6 +1,7 @@
 package state;
 
 import java.util.List;
+import java.util.Scanner;
 
 import mcts.api.GameState;
 
@@ -29,8 +30,9 @@ public class TicketToRideState implements GameState {
 	 * the user.
 	 * 
 	 * @param aiPlayerIndex The index of the AI in the players array
+	 * @param in            The scanner used to read in color cards, if necessary
 	 */
-	public void resolveUnknownsForAI(final int aiPlayerIndex) {
+	public void resolveUnknownsForAI(final int aiPlayerIndex, final Scanner in) {
 		// TODO
 	}
 

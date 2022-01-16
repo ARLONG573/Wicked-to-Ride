@@ -7,18 +7,18 @@ import data.DestinationTicket;
 
 public class DestinationTicketDeck {
 
-	private final Set<DestinationTicket> seen;
-	private final Set<DestinationTicket> unseen;
+	private final Set<DestinationTicket> possiblyInDeck;
+	private final Set<DestinationTicket> knownDiscard;
 	private int numCardsInDrawPile;
 
 	public DestinationTicketDeck() {
-		this.seen = new HashSet<>();
-		this.unseen = new HashSet<>();
+		this.possiblyInDeck = new HashSet<>();
+		this.knownDiscard = new HashSet<>();
 		this.numCardsInDrawPile = 0;
 	}
 
 	public void initDestinationTicket(final DestinationTicket destinationTicket) {
-		this.unseen.add(destinationTicket);
+		this.possiblyInDeck.add(destinationTicket);
 		this.numCardsInDrawPile++;
 	}
 }
