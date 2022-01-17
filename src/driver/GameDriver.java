@@ -19,6 +19,7 @@ public class GameDriver {
 		// Get AI player
 		System.out.print("Which player is AI? (0-" + (numPlayers - 1) + "): ");
 		final int aiPlayer = in.nextInt();
+		in.nextLine(); // consume new line
 
 		// Create initial game state
 		TicketToRideState gameState = new TicketToRideState(numPlayers, aiPlayer, numCarsPerPlayer, colorDeck,

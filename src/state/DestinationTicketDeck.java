@@ -30,4 +30,14 @@ public class DestinationTicketDeck {
 	public void removeCardFromDeckPossiblility(final DestinationTicket ticket) {
 		this.possiblyInDeck.remove(ticket);
 	}
+
+	public DestinationTicket getTicket(final String start, final String end) {
+		for (final DestinationTicket ticket : this.possiblyInDeck) {
+			if (ticket.getStart().equals(start) && ticket.getEnd().equals(end)) {
+				return ticket;
+			}
+		}
+
+		return null;
+	}
 }

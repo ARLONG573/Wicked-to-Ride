@@ -61,17 +61,22 @@ public class TicketToRideState implements GameState {
 		// Color cards
 		final int numUnknownColorCards = player.getNumUnknownColorCards();
 		for (int i = 1; i <= numUnknownColorCards; i++) {
-			System.out.println("Drawn color card " + i + ": ");
+			System.out.print("Drawn color card " + i + ": ");
 			final String color = in.next().toUpperCase();
+			in.nextLine(); // consume new line
 
 			player.convertUnknownColorCardToKnownManually(color, this.colorDeck);
 		}
 
 		// Destination tickets
 		final int numUnknownDestinationTickets = player.getNumUnknownDestinationTickets();
-		for (int i = 1; i < numUnknownDestinationTickets; i++) {
-			// TODO a GUI way to get a destination ticket
-			final DestinationTicket ticket = null;
+		for (int i = 1; i <= numUnknownDestinationTickets; i++) {
+			System.out.println("Ticket " + i + ": ");
+			System.out.print("Start: ");
+			final String start = in.nextLine().toUpperCase();
+			System.out.print("End: ");
+			final String end = in.nextLine().toUpperCase();
+			final DestinationTicket ticket = this.destinationTicketDeck.getTicket(start, end);
 
 			player.convertUnknownDestinationTicketToKnownManually(ticket, this.destinationTicketDeck);
 		}
