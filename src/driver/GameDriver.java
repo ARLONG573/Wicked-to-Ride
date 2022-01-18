@@ -30,7 +30,7 @@ public class GameDriver {
 		System.out.println("AI is thinking...");
 		gameState = (TicketToRideState) MCTS.search(gameState, 30, 1);
 		gameState.printPlayerInfo(aiPlayer);
-		gameState.getNumDestinationTicketsForHumanPlayers(in);
+		gameState.getNumDestinationTicketsForHumanPlayers(aiPlayer, in);
 
 		// Game loop
 		while (gameState.getWinningPlayers().isEmpty()) {

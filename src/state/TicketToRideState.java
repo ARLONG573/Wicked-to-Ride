@@ -120,10 +120,20 @@ public class TicketToRideState implements GameState {
 		System.out.println();
 
 		System.out.println("Score = " + player.getScore());
+		System.out.println();
 	}
 
-	public void getNumDestinationTicketsForHumanPlayers(final Scanner in) {
-		// TODO
+	public void getNumDestinationTicketsForHumanPlayers(final int aiPlayer, final Scanner in) {
+		for (int i = 0; i < this.players.length; i++) {
+			if (i != aiPlayer) {
+				System.out.print("How many destination tickets did player " + i + " keep?: ");
+
+				final int numTicketsKept = in.nextInt();
+				in.nextLine(); // consume new line
+
+				this.players[i].setNumUnknownDestinationTickets(numTicketsKept);
+			}
+		}
 	}
 
 	public int getCurrentPlayer() {

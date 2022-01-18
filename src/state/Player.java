@@ -52,6 +52,10 @@ public class Player {
 		deck.removeCardFromDeckPossiblility(ticket);
 	}
 
+	public void setNumUnknownDestinationTickets(final int numTickets) {
+		this.numUnknownDestinationTickets = numTickets;
+	}
+
 	public int getNumUnknownColorCards() {
 		return this.numUnknownColorCards;
 	}

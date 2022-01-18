@@ -6,7 +6,8 @@ import java.util.Scanner;
 
 public class ColorDeck {
 
-	public static final String[] COLORS = { "RED", "ORANGE", "YELLOW", "GREEN", "BLUE", "WHITE", "BLACK", "WILD" };
+	public static final String[] COLORS = { "RED", "ORANGE", "YELLOW", "GREEN", "BLUE", "PINK", "WHITE", "BLACK",
+			"WILD" };
 
 	private final Map<String, Long> possiblyInDeck;
 	private final Map<String, Long> discard;
