@@ -17,6 +17,10 @@ public class DestinationTicketDeck {
 		this.numCardsInDrawPile = 0;
 	}
 
+	public Set<DestinationTicket> getKnownDiscards() {
+		return this.knownDiscard;
+	}
+
 	public void initDestinationTicket(final DestinationTicket destinationTicket) {
 		this.possiblyInDeck.add(destinationTicket);
 		this.numCardsInDrawPile++;

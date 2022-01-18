@@ -2,6 +2,7 @@ package state;
 
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 
 import data.DestinationTicket;
 import mcts.api.GameState;
@@ -83,7 +84,42 @@ public class TicketToRideState implements GameState {
 	}
 
 	public void printPlayerInfo(final int playerIndex) {
-		// TODO
+		final Player player = this.players[playerIndex];
+
+		System.out.println();
+		System.out.println("Player " + playerIndex + ":");
+		System.out.println("Known color cards = " + player.getKnownColorCards());
+		System.out.println("Unknown color cards = " + player.getNumUnknownColorCards());
+		System.out.println("Face up color cards = " + this.colorDeck.getFaceUp());
+		System.out.println("Discard pile = " + this.colorDeck.getDiscard());
+
+		System.out.println();
+		final Set<DestinationTicket> tickets = player.getKnownDestinationTickets();
+		System.out.println("Known destination tickets = ");
+		for (final DestinationTicket ticket : tickets) {
+			System.out.println(ticket.getStart() + " - " + ticket.getEnd());
+		}
+		System.out.println();
+
+		System.out.println("Unknown destination tickets = " + player.getNumUnknownDestinationTickets());
+
+		System.out.println();
+		final Set<DestinationTicket> ticketsDiscard = this.destinationTicketDeck.getKnownDiscards();
+		System.out.println("Known destination ticket discards = ");
+		for (final DestinationTicket ticket : ticketsDiscard) {
+			System.out.println(ticket.getStart() + " " + ticket.getEnd());
+		}
+		System.out.println();
+
+		System.out.println();
+		final Set<Board.Connection> connections = this.board.getConnectionsForPlayer(playerIndex);
+		System.out.println("Connections = ");
+		for (final Board.Connection connection : connections) {
+			System.out.println(connection.getStart() + " - " + connection.getEnd());
+		}
+		System.out.println();
+
+		System.out.println("Score = " + player.getScore());
 	}
 
 	public void getNumDestinationTicketsForHumanPlayers(final Scanner in) {

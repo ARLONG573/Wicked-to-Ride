@@ -26,6 +26,14 @@ public class ColorDeck {
 		}
 	}
 
+	public Map<String, Long> getFaceUp() {
+		return this.faceUp;
+	}
+
+	public Map<String, Long> getDiscard() {
+		return this.discard;
+	}
+
 	public void initColor(final String color, final long count) {
 		this.possiblyInDeck.put(color, count);
 		this.numCardsInDrawPile += count;

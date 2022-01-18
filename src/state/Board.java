@@ -23,7 +23,28 @@ public class Board {
 		this.connections.get(end).add(connection);
 	}
 
-	private class Connection {
+	public Set<Connection> getConnectionsForPlayer(final int owner) {
+		final Set<String> visited = new HashSet<>();
+		final Set<Connection> playerConnections = new HashSet<>();
+
+		for (final String start : this.connections.keySet()) {
+			visited.add(start);
+
+			for (final Connection connection : this.connections.get(start)) {
+				if (connection.owner == owner) {
+					final String other = (connection.start.equals(start)) ? connection.end : connection.start;
+
+					if (!visited.contains(other)) {
+						playerConnections.add(connection);
+					}
+				}
+			}
+		}
+
+		return playerConnections;
+	}
+
+	public class Connection {
 		private final String start;
 		private final String end;
 		private final long length;
@@ -38,6 +59,14 @@ public class Board {
 			this.color = color;
 
 			this.owner = -1;
+		}
+
+		public String getStart() {
+			return this.start;
+		}
+
+		public String getEnd() {
+			return this.end;
 		}
 	}
 }

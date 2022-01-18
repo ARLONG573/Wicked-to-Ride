@@ -46,8 +46,8 @@ public class Player {
 
 	public void convertUnknownDestinationTicketToKnownManually(final DestinationTicket ticket,
 			final DestinationTicketDeck deck) {
-		
-		this.numUnknownDestinationTickets --;
+
+		this.numUnknownDestinationTickets--;
 		this.knownDestinationTickets.add(ticket);
 		deck.removeCardFromDeckPossiblility(ticket);
 	}
@@ -58,5 +58,17 @@ public class Player {
 
 	public int getNumUnknownDestinationTickets() {
 		return this.numUnknownDestinationTickets;
+	}
+
+	public Map<String, Integer> getKnownColorCards() {
+		return this.knownColorCards;
+	}
+
+	public Set<DestinationTicket> getKnownDestinationTickets() {
+		return this.knownDestinationTickets;
+	}
+
+	public int getScore() {
+		return this.score;
 	}
 }
