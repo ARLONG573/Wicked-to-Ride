@@ -1,7 +1,9 @@
 package state;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -41,7 +43,31 @@ public class Board {
 	}
 
 	public boolean isCompleteTicket(final DestinationTicket ticket, final int owner) {
-		// TODO
+		final Set<String> visited = new HashSet<>();
+		final List<String> queue = new ArrayList<>();
+
+		queue.add(ticket.getStart());
+
+		while (!queue.isEmpty()) {
+			final String city = queue.remove(0);
+
+			if (city.equals(ticket.getEnd())) {
+				return true;
+			}
+
+			visited.add(city);
+
+			for (final Connection connection : this.connectionsFromCity.get(city)) {
+				if (connection.owner == owner) {
+					final String otherCity = connection.start.equals(city) ? connection.end : connection.start;
+
+					if (!visited.contains(otherCity)) {
+						queue.add(otherCity);
+					}
+				}
+			}
+		}
+
 		return false;
 	}
 
