@@ -1,11 +1,13 @@
 package state;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
 import data.DestinationTicket;
 import mcts.api.GameState;
+import scoring.Scoring;
 
 public class TicketToRideState implements GameState {
 
@@ -18,6 +20,7 @@ public class TicketToRideState implements GameState {
 
 	private int lastPlayerIndex;
 	private int currentPlayerIndex;
+	private boolean isGameOver;
 
 	public TicketToRideState(final int numPlayers, final int aiPlayerIndex, final long numCarsPerPlayer,
 			final ColorDeck colorDeck, final DestinationTicketDeck destinationTicketDeck, final Board board,
@@ -39,6 +42,8 @@ public class TicketToRideState implements GameState {
 		// This makes sure that the AI knows to pick destination tickets at the start of
 		// the game
 		this.currentPlayerIndex = aiPlayerIndex;
+
+		this.isGameOver = false;
 	}
 
 	public void dealStartingHands(final int aiPlayerIndex, final Scanner in) {
@@ -140,6 +145,10 @@ public class TicketToRideState implements GameState {
 		return this.currentPlayerIndex;
 	}
 
+	public boolean isGameOver() {
+		return this.isGameOver;
+	}
+
 	@Override
 	public int getLastPlayer() {
 		return this.lastPlayerIndex;
@@ -159,7 +168,53 @@ public class TicketToRideState implements GameState {
 
 	@Override
 	public List<Integer> getWinningPlayers() {
-		// TODO Auto-generated method stub
-		return null;
+		final List<Integer> winningPlayers = new ArrayList<>();
+
+		if (!this.isGameOver) {
+			return winningPlayers;
+		}
+
+		// Assumes that all players' destination tickets have been revealed
+		Scoring.doEndGameScoring(this.players, this.board, this.longestRoutePoints, this.globetrotterPoints);
+
+		for (int i = 0; i < this.players.length; i++) {
+			if (winningPlayers.isEmpty()) {
+				winningPlayers.add(i);
+			} else {
+				final int indexOfBestPlayer = winningPlayers.get(0);
+				final Player bestPlayer = this.players[indexOfBestPlayer];
+				final Player contender = this.players[i];
+
+				if (contender.getScore() > bestPlayer.getScore() || (contender.getScore() == bestPlayer.getScore()
+						&& contender.getNumCompletedTickets() > bestPlayer.getNumCompletedTickets())) {
+					winningPlayers.clear();
+					winningPlayers.add(i);
+				} else if (contender.getScore() == bestPlayer.getScore()
+						&& contender.getNumCompletedTickets() == bestPlayer.getNumCompletedTickets()) {
+					winningPlayers.add(i);
+				}
+			}
+		}
+
+		return winningPlayers;
+	}
+
+	public void revealHumanDestinationTickets(final int aiPlayer, final Scanner in) {
+		for (int i = 0; i < this.players.length; i++) {
+			if (i != aiPlayer) {
+				final Player player = this.players[i];
+				final int numUnknownDestinationTickets = player.getNumUnknownDestinationTickets();
+				for (int j = 1; j <= numUnknownDestinationTickets; j++) {
+					System.out.println("Ticket " + j + ": ");
+					System.out.print("Start: ");
+					final String start = in.nextLine().toUpperCase();
+					System.out.print("End: ");
+					final String end = in.nextLine().toUpperCase();
+					final DestinationTicket ticket = this.destinationTicketDeck.getTicket(start, end);
+
+					player.convertUnknownDestinationTicketToKnownManually(ticket, this.destinationTicketDeck);
+				}
+			}
+		}
 	}
 }

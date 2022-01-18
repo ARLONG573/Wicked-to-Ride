@@ -40,11 +40,19 @@ public class GameDriver {
 				gameState = (TicketToRideState) MCTS.search(gameState, 15, 1);
 				gameState.resolveUnknownsForPlayerManually(aiPlayer, in);
 				gameState.printPlayerInfo(aiPlayer);
+
+				if (gameState.isGameOver()) {
+					gameState.revealHumanDestinationTickets(aiPlayer, in);
+				}
 			}
 			// Get human turn
 			else {
 				// TODO
 				gameState.printPlayerInfo(gameState.getLastPlayer());
+
+				if (gameState.isGameOver()) {
+					gameState.revealHumanDestinationTickets(aiPlayer, in);
+				}
 			}
 		}
 
