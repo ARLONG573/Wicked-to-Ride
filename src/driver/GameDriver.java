@@ -37,7 +37,7 @@ public class GameDriver {
 			// AI turn
 			if (gameState.getCurrentPlayer() == aiPlayer) {
 				System.out.println("AI is thinking...");
-				gameState = (TicketToRideState) MCTS.search(gameState, 30, 1);
+				gameState = (TicketToRideState) MCTS.search(gameState, 15, 1);
 				gameState.resolveUnknownsForPlayerManually(aiPlayer, in);
 				gameState.printPlayerInfo(aiPlayer);
 			}
