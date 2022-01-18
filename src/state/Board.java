@@ -5,43 +5,49 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import data.DestinationTicket;
+
 public class Board {
 
-	private final Map<String, Set<Connection>> connections;
+	private final Set<Connection> allConnections;
+	private final Map<String, Set<Connection>> connectionsFromCity;
 
 	public Board() {
-		this.connections = new HashMap<>();
+		this.allConnections = new HashSet<>();
+		this.connectionsFromCity = new HashMap<>();
 	}
 
 	public void addConnection(final String start, final String end, final long length, final String color) {
 		final Connection connection = new Connection(start, end, length, color);
 
-		this.connections.putIfAbsent(start, new HashSet<>());
-		this.connections.putIfAbsent(end, new HashSet<>());
+		this.allConnections.add(connection);
 
-		this.connections.get(start).add(connection);
-		this.connections.get(end).add(connection);
+		this.connectionsFromCity.putIfAbsent(start, new HashSet<>());
+		this.connectionsFromCity.putIfAbsent(end, new HashSet<>());
+		this.connectionsFromCity.get(start).add(connection);
+		this.connectionsFromCity.get(end).add(connection);
 	}
 
 	public Set<Connection> getConnectionsForPlayer(final int owner) {
-		final Set<String> visited = new HashSet<>();
-		final Set<Connection> playerConnections = new HashSet<>();
+		final Set<Connection> connections = new HashSet<>();
 
-		for (final String start : this.connections.keySet()) {
-			visited.add(start);
-
-			for (final Connection connection : this.connections.get(start)) {
-				if (connection.owner == owner) {
-					final String other = (connection.start.equals(start)) ? connection.end : connection.start;
-
-					if (!visited.contains(other)) {
-						playerConnections.add(connection);
-					}
-				}
+		for (final Connection connection : this.allConnections) {
+			if (connection.owner == owner) {
+				connections.add(connection);
 			}
 		}
 
-		return playerConnections;
+		return connections;
+	}
+
+	public boolean isCompleteTicket(final DestinationTicket ticket, final int owner) {
+		// TODO
+		return false;
+	}
+
+	public int getLongestRouteLengthForPlayer(final int owner) {
+		// TODO
+		return 0;
 	}
 
 	public class Connection {

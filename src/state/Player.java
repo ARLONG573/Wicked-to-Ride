@@ -15,7 +15,10 @@ public class Player {
 	private int numUnknownDestinationTickets;
 	private long numCarsRemaining;
 	private int score;
+
+	// these are only calculated at the end
 	private int numCompletedTickets;
+	private int longestRouteLength;
 
 	public Player(final long numStartingCars) {
 		this.knownColorCards = new HashMap<>();
@@ -25,6 +28,7 @@ public class Player {
 		this.numCarsRemaining = numStartingCars;
 		this.score = 0;
 		this.numCompletedTickets = 0;
+		this.longestRouteLength = 0;
 
 		// initializing color mappings now will make things easier later
 		for (final String color : ColorDeck.COLORS) {
@@ -80,5 +84,21 @@ public class Player {
 
 	public int getNumCompletedTickets() {
 		return this.numCompletedTickets;
+	}
+
+	public void setNumCompletedTickets(final int num) {
+		this.numCompletedTickets = num;
+	}
+
+	public int getLongestRouteLength() {
+		return this.longestRouteLength;
+	}
+
+	public void setLongestRouteLength(final int num) {
+		this.longestRouteLength = num;
+	}
+
+	public void addScore(final long amount) {
+		this.score += amount;
 	}
 }
