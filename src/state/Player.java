@@ -1,16 +1,16 @@
 package state;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import data.DestinationTicket;
 
 public class Player {
 
 	private final Map<String, Integer> knownColorCards;
-	private final Set<DestinationTicket> knownDestinationTickets;
+	private final List<DestinationTicket> knownDestinationTickets;
 	private int numUnknownColorCards;
 	private int numUnknownDestinationTickets;
 	private long numCarsRemaining;
@@ -22,7 +22,7 @@ public class Player {
 
 	public Player(final long numStartingCars) {
 		this.knownColorCards = new HashMap<>();
-		this.knownDestinationTickets = new HashSet<>();
+		this.knownDestinationTickets = new ArrayList<>();
 		this.numUnknownColorCards = 0;
 		this.numUnknownDestinationTickets = 0;
 		this.numCarsRemaining = numStartingCars;
@@ -74,7 +74,7 @@ public class Player {
 		return this.knownColorCards;
 	}
 
-	public Set<DestinationTicket> getKnownDestinationTickets() {
+	public List<DestinationTicket> getKnownDestinationTickets() {
 		return this.knownDestinationTickets;
 	}
 

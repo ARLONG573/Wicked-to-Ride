@@ -1,18 +1,20 @@
 package state;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import data.DestinationTicket;
 
 public class DestinationTicketDeck {
 
-	private final Set<DestinationTicket> possiblyInDeck;
+	private final List<DestinationTicket> possiblyInDeck;
 	private final Set<DestinationTicket> knownDiscard;
 	private int numCardsInDrawPile;
 
 	public DestinationTicketDeck() {
-		this.possiblyInDeck = new HashSet<>();
+		this.possiblyInDeck = new ArrayList<>();
 		this.knownDiscard = new HashSet<>();
 		this.numCardsInDrawPile = 0;
 	}

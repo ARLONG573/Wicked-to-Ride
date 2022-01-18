@@ -11,11 +11,11 @@ import data.DestinationTicket;
 
 public class Board {
 
-	private final Set<Connection> allConnections;
+	private final List<Connection> allConnections;
 	private final Map<String, Set<Connection>> connectionsFromCity;
 
 	public Board() {
-		this.allConnections = new HashSet<>();
+		this.allConnections = new ArrayList<>();
 		this.connectionsFromCity = new HashMap<>();
 	}
 
@@ -30,8 +30,8 @@ public class Board {
 		this.connectionsFromCity.get(end).add(connection);
 	}
 
-	public Set<Connection> getConnectionsForPlayer(final int owner) {
-		final Set<Connection> connections = new HashSet<>();
+	public List<Connection> getConnectionsForPlayer(final int owner) {
+		final List<Connection> connections = new ArrayList<>();
 
 		for (final Connection connection : this.allConnections) {
 			if (connection.owner == owner) {

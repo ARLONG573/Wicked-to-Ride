@@ -99,7 +99,7 @@ public class TicketToRideState implements GameState {
 		System.out.println("Discard pile = " + this.colorDeck.getDiscard());
 
 		System.out.println();
-		final Set<DestinationTicket> tickets = player.getKnownDestinationTickets();
+		final List<DestinationTicket> tickets = player.getKnownDestinationTickets();
 		System.out.println("Known destination tickets = ");
 		for (final DestinationTicket ticket : tickets) {
 			System.out.println(ticket.getStart() + " - " + ticket.getEnd());
@@ -117,7 +117,7 @@ public class TicketToRideState implements GameState {
 		System.out.println();
 
 		System.out.println();
-		final Set<Board.Connection> connections = this.board.getConnectionsForPlayer(playerIndex);
+		final List<Board.Connection> connections = this.board.getConnectionsForPlayer(playerIndex);
 		System.out.println("Connections = ");
 		for (final Board.Connection connection : connections) {
 			System.out.println(connection.getStart() + " - " + connection.getEnd());
