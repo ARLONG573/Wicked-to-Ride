@@ -163,6 +163,7 @@ public class TicketToRideState implements GameState {
 				in.nextLine(); // consume new line
 
 				this.players[i].setNumUnknownDestinationTickets(numTicketsKept);
+				this.destinationTicketDeck.addDiscards(3 - numTicketsKept);
 			}
 		}
 	}
@@ -240,10 +241,13 @@ public class TicketToRideState implements GameState {
 		// if this is a second turn of a color-drawing turn, create a state for each
 		// possible card to take (no face up wild allowed)
 		else if (this.haveAlreadyTakenColorCard) {
-			final TicketToRideState takeFromDrawPileCopy = new TicketToRideState(this);
-			takeFromDrawPileCopy.players[takeFromDrawPileCopy.currentPlayerIndex]
-					.drawUnknownColorCardFromDeck(takeFromDrawPileCopy.colorDeck);
-			nextStates.add(takeFromDrawPileCopy);
+
+			if (this.colorDeck.canDrawFromTop()) {
+				final TicketToRideState takeFromDrawPileCopy = new TicketToRideState(this);
+				takeFromDrawPileCopy.players[takeFromDrawPileCopy.currentPlayerIndex]
+						.drawUnknownColorCardFromDeck(takeFromDrawPileCopy.colorDeck);
+				nextStates.add(takeFromDrawPileCopy);
+			}
 
 			for (final String color : this.colorDeck.getFaceUp().keySet()) {
 				if (!color.equals("WILD") && this.colorDeck.getFaceUp().get(color) > 0) {
@@ -265,6 +269,22 @@ public class TicketToRideState implements GameState {
 				if (this.players[this.currentPlayerIndex].getNumCarsRemaining() < 3) {
 					ticketToRideState.isGameOver = true;
 				}
+			}
+
+			// if we can't do anything, just go to the next player
+			if (nextStates.isEmpty()) {
+				final TicketToRideState copy = new TicketToRideState(this);
+				copy.haveAlreadyTakenColorCard = false;
+				copy.lastPlayerIndex = copy.currentPlayerIndex;
+				copy.currentPlayerIndex = copy.getNextPlayer();
+
+				// if we are at less than 3 trains, then we must have been the one to get there
+				// first, so the game is over
+				if (this.players[this.currentPlayerIndex].getNumCarsRemaining() < 3) {
+					copy.isGameOver = true;
+				}
+
+				nextStates.add(copy);
 			}
 
 			return nextStates;
@@ -340,9 +360,74 @@ public class TicketToRideState implements GameState {
 
 			return nextStates;
 		}
+
 		// if this is a first turn, make a state for each possible train placement, each
 		// possible color card, and drawing tickets
-		// TODO
+
+		// train placements
+		final Set<Board.Connection> possibleConnectionsForPlayer = this.board
+				.getPossibleConnectionsForOwner(this.currentPlayerIndex);
+
+		final boolean isLastTurn = this.players[this.currentPlayerIndex].getNumCarsRemaining() < 3;
+
+		for (final Board.Connection connection : possibleConnectionsForPlayer) {
+			if (this.players[this.currentPlayerIndex].canAffordConnection(connection)) {
+
+				if (!connection.getColor().equals("GRAY")) {
+					final TicketToRideState copy = new TicketToRideState(this);
+					copy.players[copy.currentPlayerIndex].buildConnection(connection, copy.board, copy.colorDeck,
+							copy.currentPlayerIndex, copy.players.length);
+					copy.lastPlayerIndex = copy.currentPlayerIndex;
+					copy.currentPlayerIndex = copy.getNextPlayer();
+					copy.isGameOver = isLastTurn;
+					nextStates.add(copy);
+				} else {
+					for (final String color : ColorDeck.COLORS) {
+						if (!color.equals("WILD")) {
+							if (this.players[this.currentPlayerIndex].canAffordGrayWithColor(connection.getLength(),
+									color)) {
+								final TicketToRideState copy = new TicketToRideState(this);
+								copy.players[copy.currentPlayerIndex].buildGrayConnectionWithColor(connection,
+										copy.board, color, copy.colorDeck, copy.currentPlayerIndex,
+										copy.players.length);
+								copy.lastPlayerIndex = copy.currentPlayerIndex;
+								copy.currentPlayerIndex = copy.getNextPlayer();
+								copy.isGameOver = isLastTurn;
+								nextStates.add(copy);
+							}
+						}
+					}
+				}
+
+			}
+		}
+
+		// color card choices
+		if (this.colorDeck.canDrawFromTop()) {
+			final TicketToRideState takeFromDrawPileCopy = new TicketToRideState(this);
+			takeFromDrawPileCopy.players[takeFromDrawPileCopy.currentPlayerIndex]
+					.drawUnknownColorCardFromDeck(takeFromDrawPileCopy.colorDeck);
+			takeFromDrawPileCopy.haveAlreadyTakenColorCard = true;
+			nextStates.add(takeFromDrawPileCopy);
+		}
+
+		for (final String color : this.colorDeck.getFaceUp().keySet()) {
+			if (this.colorDeck.getFaceUp().get(color) > 0) {
+				final TicketToRideState state = new TicketToRideState(this);
+				state.players[state.currentPlayerIndex].drawFaceUp(color, state.colorDeck);
+				state.haveAlreadyTakenColorCard = !color.equals("WILD");
+				nextStates.add(state);
+			}
+		}
+
+		// tickets
+		if (this.destinationTicketDeck.canDrawThreeTickets()) {
+			final TicketToRideState copy = new TicketToRideState(this);
+			copy.players[copy.currentPlayerIndex].drawThreeTickets(copy.destinationTicketDeck);
+			copy.haveAlreadyDrawnTickets = true;
+			nextStates.add(copy);
+		}
+
 		return nextStates;
 	}
 

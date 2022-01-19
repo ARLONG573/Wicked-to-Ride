@@ -12,11 +12,18 @@ import data.DestinationTicket;
 public class Board {
 
 	private final List<Connection> allConnections;
+
+	// used for path calculation (e.g. completed tickets, longest route)
 	private final Map<String, Set<Connection>> connectionsFromCity;
+
+	// used for connections that are technically open, but not claimable by a player
+	// (e.g. specific double-route rules)
+	private final Map<Integer, Set<Connection>> forbiddenConnectionsForPlayer;
 
 	public Board() {
 		this.allConnections = new ArrayList<>();
 		this.connectionsFromCity = new HashMap<>();
+		this.forbiddenConnectionsForPlayer = new HashMap<>();
 	}
 
 	public Board(final Board board) {
@@ -33,6 +40,51 @@ public class Board {
 			}
 
 			this.connectionsFromCity.put(city, setCopy);
+		}
+
+		this.forbiddenConnectionsForPlayer = new HashMap<>();
+		for (final Integer owner : board.forbiddenConnectionsForPlayer.keySet()) {
+			final Set<Connection> setCopy = new HashSet<>();
+			for (final Connection connection : board.forbiddenConnectionsForPlayer.get(owner)) {
+				setCopy.add(connection);
+			}
+
+			this.forbiddenConnectionsForPlayer.put(owner, setCopy);
+		}
+	}
+
+	public Set<Connection> getPossibleConnectionsForOwner(final int owner) {
+		final Set<Connection> connections = new HashSet<>();
+
+		for (final Connection connection : this.allConnections) {
+			if (connection.owner == -1 && !this.forbiddenConnectionsForPlayer.get(owner).contains(connection)) {
+				connections.add(connection);
+			}
+		}
+
+		return connections;
+	}
+
+	public void giveOwnershipToPlayer(final Connection connection, final int owner, final int numPlayers) {
+		connection.owner = owner;
+
+		// forbid player from taking any other open route between the same two cities
+		// if less than 4 players, forbid EVERY player from taking any other open route
+		// between the same two cities
+		for (final Connection otherConnection : this.allConnections) {
+			if (!otherConnection.equals(connection) && otherConnection.owner == -1
+					&& otherConnection.start.equals(connection.start) && otherConnection.end.equals(connection.end)) {
+
+				if (numPlayers > 3) {
+					this.forbiddenConnectionsForPlayer.putIfAbsent(owner, new HashSet<>());
+					this.forbiddenConnectionsForPlayer.get(owner).add(connection);
+				} else {
+					for (int i = 0; i < numPlayers; i++) {
+						this.forbiddenConnectionsForPlayer.putIfAbsent(i, new HashSet<>());
+						this.forbiddenConnectionsForPlayer.get(i).add(connection);
+					}
+				}
+			}
 		}
 	}
 
@@ -124,6 +176,18 @@ public class Board {
 
 		public String getEnd() {
 			return this.end;
+		}
+
+		public long getLength() {
+			return this.length;
+		}
+
+		public String getColor() {
+			return this.color;
+		}
+
+		public int getOwner() {
+			return this.owner;
 		}
 	}
 }

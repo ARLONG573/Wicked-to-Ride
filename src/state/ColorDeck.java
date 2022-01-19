@@ -190,6 +190,10 @@ public class ColorDeck {
 		}
 	}
 
+	public boolean canDrawFromTop() {
+		return this.numCardsInDrawPile > 0 || this.getNumDiscard() > 0;
+	}
+
 	private void convertDiscardToDraw() {
 		this.numCardsInDrawPile = 0;
 
@@ -202,10 +206,18 @@ public class ColorDeck {
 	}
 
 	public void drawUnknownFromDeck() {
+		if (this.numCardsInDrawPile == 0) {
+			this.convertDiscardToDraw();
+		}
+
 		this.numCardsInDrawPile--;
 	}
 
 	public void drawFaceUp(final String color) {
 		this.faceUp.put(color, this.faceUp.get(color) - 1);
+	}
+
+	public void sendKnownToDiscard(final long count, final String color) {
+		this.discard.put(color, this.discard.get(color) + count);
 	}
 }
