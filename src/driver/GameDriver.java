@@ -48,13 +48,16 @@ public class GameDriver {
 			}
 			// Get human turn
 			else {
-				gameState.replenishFaceUp(in);
-				// TODO
-				gameState.printPlayerInfo(gameState.getLastPlayer());
-
-				if (gameState.isGameOver()) {
-					gameState.revealHumanDestinationTickets(aiPlayer, in);
+				while(true){
+					
 				}
+//				gameState.replenishFaceUp(in);
+//				// TODO
+//				gameState.printPlayerInfo(gameState.getLastPlayer());
+//
+//				if (gameState.isGameOver()) {
+//					gameState.revealHumanDestinationTickets(aiPlayer, in);
+//				}
 			}
 		}
 

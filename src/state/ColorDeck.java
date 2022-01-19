@@ -145,6 +145,70 @@ public class ColorDeck {
 		return total;
 	}
 
+	public void replenishFaceUpRandomly() {
+		if (this.getNumFaceUp() == 5 && this.faceUp.get("WILD") < 3) {
+			return;
+		}
+
+		int numSweeps = 0;
+		boolean keepGoing = true;
+		while (keepGoing) {
+			// draw a card from the deck if possible, otherwise we cannot keep going
+			if (this.getNumFaceUp() < 5) {
+				if (this.numCardsInDrawPile > 0) {
+					// find total possible cards it could be
+					long total = 0;
+
+					for (final String color : this.possiblyInDeck.keySet()) {
+						total += this.possiblyInDeck.get(color);
+					}
+
+					// pick a random number from 1 to total
+					final long n = ((long) (Math.random() * total)) + 1;
+
+					// iterate through the map until we find the nth card
+					long current = 0;
+					String colorToGive = null;
+
+					for (final String color : this.possiblyInDeck.keySet()) {
+						current += this.possiblyInDeck.get(color);
+
+						if (current >= n) {
+							colorToGive = color;
+							break;
+						}
+					}
+
+					this.removeCardFromDeckPossibility(colorToGive);
+					this.faceUp.put(colorToGive, this.faceUp.get(colorToGive) + 1);
+					this.numCardsInDrawPile--;
+				} else {
+					if (this.getNumDiscard() > 0) {
+						this.convertDiscardToDraw();
+					} else {
+						keepGoing = false;
+					}
+				}
+			}
+			// if already at 5 cards, sweep if necessary, up to 3 times
+			else {
+				if (this.faceUp.get("WILD") >= 3) {
+					for (final String color : this.faceUp.keySet()) {
+						this.discard.put(color, this.discard.get(color) + this.faceUp.get(color));
+						this.faceUp.put(color, 0L);
+					}
+					numSweeps++;
+
+					if (numSweeps == 3) {
+						keepGoing = false;
+					}
+				} else {
+					keepGoing = false;
+				}
+			}
+		}
+	}
+
 	public void replenishFaceUp(final Scanner in) {
 		if (this.getNumFaceUp() == 5 && this.faceUp.get("WILD") < 3) {
 			return;

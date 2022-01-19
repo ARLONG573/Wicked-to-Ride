@@ -444,7 +444,8 @@ public class TicketToRideState implements GameState {
 			copy.destinationTicketDeck.fillUnknownsRandomlyForPlayer(player);
 		}
 
-		// replenish the face up with a random card if needed
+		// replenish the face up with a random card if needed and possible
+		this.colorDeck.replenishFaceUpRandomly();
 
 		// pick a random turn
 		// TODO
