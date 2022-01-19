@@ -20,6 +20,7 @@ public class TicketToRideState implements GameState {
 
 	private int lastPlayerIndex;
 	private int currentPlayerIndex;
+	private boolean isLastTurn;
 	private boolean isGameOver;
 	private boolean haveInitialTicketsBeenChosen;
 
@@ -44,6 +45,7 @@ public class TicketToRideState implements GameState {
 		// the game
 		this.currentPlayerIndex = aiPlayerIndex;
 
+		this.isLastTurn = false;
 		this.isGameOver = false;
 		this.haveInitialTicketsBeenChosen = false;
 	}
@@ -175,8 +177,21 @@ public class TicketToRideState implements GameState {
 
 	@Override
 	public List<GameState> getNextStates() {
-		// TODO Auto-generated method stub
-		return null;
+		final List<GameState> nextStates = new ArrayList<>();
+
+		// cannot expand this node if the game is over
+		if (this.isGameOver) {
+			return nextStates;
+		}
+
+		// cannot expand this node if the current player is not the AI (due to
+		// incomplete information)
+		if (this.players[this.currentPlayerIndex].getNumUnknownDestinationTickets() > 0) {
+			return nextStates;
+		}
+
+		// TODO make a state for each possible move
+		return nextStates;
 	}
 
 	@Override
@@ -269,6 +284,7 @@ public class TicketToRideState implements GameState {
 	public void revealHumanDestinationTickets(final int aiPlayer, final Scanner in) {
 		for (int i = 0; i < this.players.length; i++) {
 			if (i != aiPlayer) {
+				System.out.println("Revealing player " + i + "'s destination tickets:");
 				final Player player = this.players[i];
 				final int numUnknownDestinationTickets = player.getNumUnknownDestinationTickets();
 				for (int j = 1; j <= numUnknownDestinationTickets; j++) {
