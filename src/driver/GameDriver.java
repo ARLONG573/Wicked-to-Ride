@@ -48,6 +48,7 @@ public class GameDriver {
 			}
 			// Get human turn
 			else {
+				gameState.replenishFaceUp(in);
 				// TODO
 				gameState.printPlayerInfo(gameState.getLastPlayer());
 

@@ -200,4 +200,12 @@ public class ColorDeck {
 			this.discard.put(color, 0L);
 		}
 	}
+
+	public void drawUnknownFromDeck() {
+		this.numCardsInDrawPile--;
+	}
+
+	public void drawFaceUp(final String color) {
+		this.faceUp.put(color, this.faceUp.get(color) - 1);
+	}
 }

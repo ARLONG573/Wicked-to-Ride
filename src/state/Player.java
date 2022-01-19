@@ -101,6 +101,10 @@ public class Player {
 		return this.knownDestinationTickets;
 	}
 
+	public int getNumKnownDestinationTickets() {
+		return this.knownDestinationTickets.size();
+	}
+
 	public int getScore() {
 		return this.score;
 	}
@@ -128,5 +132,15 @@ public class Player {
 	public void discardKnownTicketAtIndex(final int index, final DestinationTicketDeck deck) {
 		final DestinationTicket discardedTicket = this.knownDestinationTickets.remove(index);
 		deck.discardKnownTicket(discardedTicket);
+	}
+
+	public void drawUnknownColorCardFromDeck(final ColorDeck deck) {
+		this.numUnknownColorCards++;
+		deck.drawUnknownFromDeck();
+	}
+
+	public void drawFaceUp(final String color, final ColorDeck deck) {
+		this.knownColorCards.put(color, this.knownColorCards.get(color) + 1);
+		deck.drawFaceUp(color);
 	}
 }
