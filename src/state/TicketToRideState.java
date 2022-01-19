@@ -262,7 +262,9 @@ public class TicketToRideState implements GameState {
 
 				// if we are at less than 3 trains, then we must have been the one to get there
 				// first, so the game is over
-				ticketToRideState.isGameOver = true;
+				if (this.players[this.currentPlayerIndex].getNumCarsRemaining() < 3) {
+					ticketToRideState.isGameOver = true;
+				}
 			}
 
 			return nextStates;
@@ -331,7 +333,9 @@ public class TicketToRideState implements GameState {
 
 				// if we are at less than 3 trains, then we must have been the one to get there
 				// first, so the game is over
-				ticketToRideState.isGameOver = true;
+				if (this.players[this.currentPlayerIndex].getNumCarsRemaining() < 3) {
+					ticketToRideState.isGameOver = true;
+				}
 			}
 
 			return nextStates;
