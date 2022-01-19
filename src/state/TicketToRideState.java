@@ -375,8 +375,8 @@ public class TicketToRideState implements GameState {
 
 				if (!connection.getColor().equals("GRAY")) {
 					final TicketToRideState copy = new TicketToRideState(this);
-					copy.players[copy.currentPlayerIndex].buildConnection(connection, copy.board, copy.colorDeck,
-							copy.currentPlayerIndex, copy.players.length);
+					copy.players[copy.currentPlayerIndex].buildConnection(copy.board.getMatchingConnection(connection),
+							copy.board, copy.colorDeck, copy.currentPlayerIndex, copy.players.length);
 					copy.lastPlayerIndex = copy.currentPlayerIndex;
 					copy.currentPlayerIndex = copy.getNextPlayer();
 					copy.isGameOver = isLastTurn;
@@ -387,9 +387,9 @@ public class TicketToRideState implements GameState {
 							if (this.players[this.currentPlayerIndex].canAffordGrayWithColor(connection.getLength(),
 									color)) {
 								final TicketToRideState copy = new TicketToRideState(this);
-								copy.players[copy.currentPlayerIndex].buildGrayConnectionWithColor(connection,
-										copy.board, color, copy.colorDeck, copy.currentPlayerIndex,
-										copy.players.length);
+								copy.players[copy.currentPlayerIndex].buildGrayConnectionWithColor(
+										copy.board.getMatchingConnection(connection), copy.board, color, copy.colorDeck,
+										copy.currentPlayerIndex, copy.players.length);
 								copy.lastPlayerIndex = copy.currentPlayerIndex;
 								copy.currentPlayerIndex = copy.getNextPlayer();
 								copy.isGameOver = isLastTurn;

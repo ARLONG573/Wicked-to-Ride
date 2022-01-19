@@ -69,7 +69,7 @@ public class GameConfig {
 		}
 
 		// board
-		final Board board = new Board();
+		final Board board = new Board(numPlayers);
 
 		final JSONArray connectionsArray = (JSONArray) obj.get("connections");
 		for (final Object connectionObj : connectionsArray) {

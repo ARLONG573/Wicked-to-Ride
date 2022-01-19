@@ -20,10 +20,14 @@ public class Board {
 	// (e.g. specific double-route rules)
 	private final Map<Integer, Set<Connection>> forbiddenConnectionsForPlayer;
 
-	public Board() {
+	public Board(final int numPlayers) {
 		this.allConnections = new ArrayList<>();
 		this.connectionsFromCity = new HashMap<>();
+
 		this.forbiddenConnectionsForPlayer = new HashMap<>();
+		for (int i = 0; i < numPlayers; i++) {
+			this.forbiddenConnectionsForPlayer.put(i, new HashSet<>());
+		}
 	}
 
 	public Board(final Board board) {
@@ -36,7 +40,7 @@ public class Board {
 		for (final String city : board.connectionsFromCity.keySet()) {
 			final Set<Connection> setCopy = new HashSet<>();
 			for (final Connection connection : board.connectionsFromCity.get(city)) {
-				setCopy.add(connection);
+				setCopy.add(new Connection(connection));
 			}
 
 			this.connectionsFromCity.put(city, setCopy);
@@ -46,7 +50,7 @@ public class Board {
 		for (final Integer owner : board.forbiddenConnectionsForPlayer.keySet()) {
 			final Set<Connection> setCopy = new HashSet<>();
 			for (final Connection connection : board.forbiddenConnectionsForPlayer.get(owner)) {
-				setCopy.add(connection);
+				setCopy.add(new Connection(connection));
 			}
 
 			this.forbiddenConnectionsForPlayer.put(owner, setCopy);
@@ -76,11 +80,9 @@ public class Board {
 					&& otherConnection.start.equals(connection.start) && otherConnection.end.equals(connection.end)) {
 
 				if (numPlayers > 3) {
-					this.forbiddenConnectionsForPlayer.putIfAbsent(owner, new HashSet<>());
 					this.forbiddenConnectionsForPlayer.get(owner).add(connection);
 				} else {
 					for (int i = 0; i < numPlayers; i++) {
-						this.forbiddenConnectionsForPlayer.putIfAbsent(i, new HashSet<>());
 						this.forbiddenConnectionsForPlayer.get(i).add(connection);
 					}
 				}
@@ -138,6 +140,18 @@ public class Board {
 		}
 
 		return false;
+	}
+
+	public Connection getMatchingConnection(final Connection connection) {
+		for (final Connection otherConnection : this.allConnections) {
+			if (otherConnection.start.equals(connection.start) && otherConnection.end.equals(connection.end)
+					&& otherConnection.length == connection.length && otherConnection.color.equals(connection.color)
+					&& otherConnection.owner == connection.owner) {
+				return otherConnection;
+			}
+		}
+
+		return null;
 	}
 
 	public int getLongestRouteLengthForPlayer(final int owner) {
