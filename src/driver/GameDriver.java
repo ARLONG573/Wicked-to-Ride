@@ -28,7 +28,7 @@ public class GameDriver {
 
 		// AI needs to figure out which destination tickets to keep
 		System.out.println("AI is thinking...");
-		//gameState = (TicketToRideState) MCTS.search(gameState, 30, 1);
+		gameState = (TicketToRideState) MCTS.search(gameState, 30, 1);
 		gameState.printPlayerInfo(aiPlayer);
 		gameState.getNumDestinationTicketsForHumanPlayers(aiPlayer, in);
 
@@ -36,6 +36,7 @@ public class GameDriver {
 		while (gameState.getWinningPlayers().isEmpty()) {
 			// AI turn
 			if (gameState.getCurrentPlayer() == aiPlayer) {
+				gameState.replenishFaceUp(in);
 				System.out.println("AI is thinking...");
 				gameState = (TicketToRideState) MCTS.search(gameState, 15, 1);
 				gameState.resolveUnknownsForPlayerManually(aiPlayer, in);

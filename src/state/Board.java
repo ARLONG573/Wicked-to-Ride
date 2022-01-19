@@ -115,6 +115,7 @@ public class Board {
 			this.end = connection.end;
 			this.length = connection.length;
 			this.color = connection.color;
+			this.owner = connection.owner;
 		}
 
 		public String getStart() {

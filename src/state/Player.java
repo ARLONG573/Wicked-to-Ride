@@ -55,6 +55,10 @@ public class Player {
 		this.longestRouteLength = player.longestRouteLength;
 	}
 
+	public long getNumCarsRemaining() {
+		return this.numCarsRemaining;
+	}
+
 	public void addUnknownColorCards(final int numCards) {
 		this.numUnknownColorCards += numCards;
 	}

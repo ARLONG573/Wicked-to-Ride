@@ -107,21 +107,97 @@ public class ColorDeck {
 
 			// pick a random number from 1 to total
 			final long n = ((long) (Math.random() * total)) + 1;
-			
-			//iterate through the map until we find the nth card
+
+			// iterate through the map until we find the nth card
 			long current = 0;
 			String colorToGive = null;
-			
-			for(final String color : this.possiblyInDeck.keySet()) {
+
+			for (final String color : this.possiblyInDeck.keySet()) {
 				current += this.possiblyInDeck.get(color);
-				
-				if(current >= n) {
+
+				if (current >= n) {
 					colorToGive = color;
 					break;
 				}
 			}
-			
+
 			player.convertUnknownColorCardToKnownManually(colorToGive, this);
+		}
+	}
+
+	public long getNumFaceUp() {
+		long total = 0;
+
+		for (final String color : this.faceUp.keySet()) {
+			total += this.faceUp.get(color);
+		}
+
+		return total;
+	}
+
+	public long getNumDiscard() {
+		long total = 0;
+
+		for (final String color : this.discard.keySet()) {
+			total += this.discard.get(color);
+		}
+
+		return total;
+	}
+
+	public void replenishFaceUp(final Scanner in) {
+		if (this.getNumFaceUp() == 5 && this.faceUp.get("WILD") < 3) {
+			return;
+		}
+
+		int numSweeps = 0;
+		boolean keepGoing = true;
+		while (keepGoing) {
+			// draw a card from the deck if possible, otherwise we cannot keep going
+			if (this.getNumFaceUp() < 5) {
+				if (this.numCardsInDrawPile > 0) {
+					System.out.print("New face up card: ");
+					final String color = in.next().toUpperCase();
+					in.nextLine(); // consume new line
+
+					this.removeCardFromDeckPossibility(color);
+					this.faceUp.put(color, this.faceUp.get(color) + 1);
+					this.numCardsInDrawPile--;
+				} else {
+					if (this.getNumDiscard() > 0) {
+						this.convertDiscardToDraw();
+					} else {
+						keepGoing = false;
+					}
+				}
+			}
+			// if already at 5 cards, sweep if necessary, up to 3 times
+			else {
+				if (this.faceUp.get("WILD") >= 3) {
+					for (final String color : this.faceUp.keySet()) {
+						this.discard.put(color, this.discard.get(color) + this.faceUp.get(color));
+						this.faceUp.put(color, 0L);
+					}
+					numSweeps++;
+
+					if (numSweeps == 3) {
+						keepGoing = false;
+					}
+				} else {
+					keepGoing = false;
+				}
+			}
+		}
+	}
+
+	private void convertDiscardToDraw() {
+		this.numCardsInDrawPile = 0;
+
+		for (final String color : this.discard.keySet()) {
+			this.possiblyInDeck.put(color, this.discard.get(color));
+			this.numCardsInDrawPile += this.discard.get(color);
+
+			this.discard.put(color, 0L);
 		}
 	}
 }
