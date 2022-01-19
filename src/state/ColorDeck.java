@@ -111,7 +111,6 @@ public class ColorDeck {
 			// iterate through the map until we find the nth card
 			long current = 0;
 			String colorToGive = null;
-
 			for (final String color : this.possiblyInDeck.keySet()) {
 				current += this.possiblyInDeck.get(color);
 
@@ -259,10 +258,8 @@ public class ColorDeck {
 	}
 
 	private void convertDiscardToDraw() {
-		this.numCardsInDrawPile = 0;
-
 		for (final String color : this.discard.keySet()) {
-			this.possiblyInDeck.put(color, this.discard.get(color));
+			this.possiblyInDeck.put(color, discard.get(color));
 			this.numCardsInDrawPile += this.discard.get(color);
 
 			this.discard.put(color, 0L);

@@ -146,7 +146,8 @@ public class TicketToRideState implements GameState {
 		final List<Board.Connection> connections = this.board.getConnectionsForPlayer(playerIndex);
 		System.out.println("Connections = ");
 		for (final Board.Connection connection : connections) {
-			System.out.println(connection.getStart() + " - " + connection.getEnd());
+			System.out
+					.println(connection.getStart() + " - " + connection.getEnd() + " (" + connection.getColor() + ")");
 		}
 		System.out.println();
 
@@ -428,6 +429,14 @@ public class TicketToRideState implements GameState {
 			nextStates.add(copy);
 		}
 
+		// if next states is somehow still empty, just end the game since there are no
+		// legal moves
+		if (nextStates.isEmpty()) {
+			final TicketToRideState copy = new TicketToRideState(this);
+			copy.isGameOver = true;
+			nextStates.add(copy);
+		}
+
 		return nextStates;
 	}
 
@@ -455,7 +464,7 @@ public class TicketToRideState implements GameState {
 		// possible card to take (no face up wild allowed)
 		if (temp.haveAlreadyTakenColorCard) {
 
-			if (this.colorDeck.canDrawFromTop()) {
+			if (temp.colorDeck.canDrawFromTop()) {
 				final TicketToRideState takeFromDrawPileCopy = new TicketToRideState(temp);
 				takeFromDrawPileCopy.players[takeFromDrawPileCopy.currentPlayerIndex]
 						.drawUnknownColorCardFromDeck(takeFromDrawPileCopy.colorDeck);
@@ -615,7 +624,6 @@ public class TicketToRideState implements GameState {
 						}
 					}
 				}
-
 			}
 		}
 
@@ -642,6 +650,14 @@ public class TicketToRideState implements GameState {
 			final TicketToRideState copy = new TicketToRideState(temp);
 			copy.players[copy.currentPlayerIndex].drawThreeTickets(copy.destinationTicketDeck);
 			copy.haveAlreadyDrawnTickets = true;
+			nextStates.add(copy);
+		}
+
+		// if next states is somehow still empty, just end the game since there are no
+		// legal moves
+		if (nextStates.isEmpty()) {
+			final TicketToRideState copy = new TicketToRideState(temp);
+			copy.isGameOver = true;
 			nextStates.add(copy);
 		}
 
