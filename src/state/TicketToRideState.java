@@ -434,6 +434,7 @@ public class TicketToRideState implements GameState {
 	@Override
 	public GameState getRandomNextState() {
 		// remember that it is guaranteed that the game has not ended
+		// it is also guaranteed that initial tickets have been chosen already
 
 		// make a copy of the current state to spawn new states off of
 		final TicketToRideState temp = new TicketToRideState(this);
@@ -445,15 +446,208 @@ public class TicketToRideState implements GameState {
 		}
 
 		// replenish the face up with a random card if needed and possible
-		this.colorDeck.replenishFaceUpRandomly();
+		temp.colorDeck.replenishFaceUpRandomly();
 
 		// generate all of the possible next states
-		final List<GameState> possibleStates = new ArrayList<>();
-		// TODO
+		final List<GameState> nextStates = new ArrayList<>();
+
+		// if this is a second turn of a color-drawing turn, create a state for each
+		// possible card to take (no face up wild allowed)
+		if (temp.haveAlreadyTakenColorCard) {
+
+			if (this.colorDeck.canDrawFromTop()) {
+				final TicketToRideState takeFromDrawPileCopy = new TicketToRideState(temp);
+				takeFromDrawPileCopy.players[takeFromDrawPileCopy.currentPlayerIndex]
+						.drawUnknownColorCardFromDeck(takeFromDrawPileCopy.colorDeck);
+				nextStates.add(takeFromDrawPileCopy);
+			}
+
+			for (final String color : temp.colorDeck.getFaceUp().keySet()) {
+				if (!color.equals("WILD") && temp.colorDeck.getFaceUp().get(color) > 0) {
+					final TicketToRideState state = new TicketToRideState(temp);
+					state.players[state.currentPlayerIndex].drawFaceUp(color, state.colorDeck);
+					nextStates.add(state);
+				}
+			}
+
+			for (final GameState state : nextStates) {
+				final TicketToRideState ticketToRideState = (TicketToRideState) state;
+
+				ticketToRideState.haveAlreadyTakenColorCard = false;
+				ticketToRideState.lastPlayerIndex = ticketToRideState.currentPlayerIndex;
+				ticketToRideState.currentPlayerIndex = ticketToRideState.getNextPlayer();
+
+				// if we are at less than 3 trains, then we must have been the one to get there
+				// first, so the game is over
+				if (temp.players[temp.currentPlayerIndex].getNumCarsRemaining() < 3) {
+					ticketToRideState.isGameOver = true;
+				}
+			}
+
+			// if we can't do anything, just go to the next player
+			if (nextStates.isEmpty()) {
+				final TicketToRideState copy = new TicketToRideState(temp);
+				copy.haveAlreadyTakenColorCard = false;
+				copy.lastPlayerIndex = copy.currentPlayerIndex;
+				copy.currentPlayerIndex = copy.getNextPlayer();
+
+				// if we are at less than 3 trains, then we must have been the one to get there
+				// first, so the game is over
+				if (temp.players[temp.currentPlayerIndex].getNumCarsRemaining() < 3) {
+					copy.isGameOver = true;
+				}
+
+				nextStates.add(copy);
+			}
+
+			// pick one at random
+			final int randomIndex = (int) (Math.random() * nextStates.size());
+			return nextStates.get(randomIndex);
+		}
+		// if this is a second turn of a ticket-drawing turn, create a state for each
+		// possible combination of tickets to take
+		else if (temp.haveAlreadyDrawnTickets) {
+			final TicketToRideState copy1 = new TicketToRideState(temp);
+			final TicketToRideState copy2 = new TicketToRideState(temp);
+			final TicketToRideState copy3 = new TicketToRideState(temp);
+			final TicketToRideState copy4 = new TicketToRideState(temp);
+			final TicketToRideState copy5 = new TicketToRideState(temp);
+			final TicketToRideState copy6 = new TicketToRideState(temp);
+			final TicketToRideState copy7 = new TicketToRideState(temp);
+
+			// keep left
+			final Player copy1Player = copy1.players[copy1.currentPlayerIndex];
+			copy1Player.discardKnownTicketAtIndex(copy1Player.getNumKnownDestinationTickets() - 1,
+					copy1.destinationTicketDeck);
+			copy1Player.discardKnownTicketAtIndex(copy1Player.getNumKnownDestinationTickets() - 1,
+					copy1.destinationTicketDeck);
+
+			// keep middle
+			final Player copy2Player = copy2.players[copy2.currentPlayerIndex];
+			copy2Player.discardKnownTicketAtIndex(copy2Player.getNumKnownDestinationTickets() - 1,
+					copy2.destinationTicketDeck);
+			copy2Player.discardKnownTicketAtIndex(copy2Player.getNumKnownDestinationTickets() - 2,
+					copy2.destinationTicketDeck);
+
+			// keep right
+			final Player copy3Player = copy3.players[copy3.currentPlayerIndex];
+			copy3Player.discardKnownTicketAtIndex(copy3Player.getNumKnownDestinationTickets() - 2,
+					copy3.destinationTicketDeck);
+			copy3Player.discardKnownTicketAtIndex(copy3Player.getNumKnownDestinationTickets() - 2,
+					copy3.destinationTicketDeck);
+
+			// keep left and middle
+			final Player copy4Player = copy4.players[copy4.currentPlayerIndex];
+			copy4Player.discardKnownTicketAtIndex(copy4Player.getNumKnownDestinationTickets() - 1,
+					copy4.destinationTicketDeck);
+
+			// keep left and right
+			final Player copy5Player = copy5.players[copy5.currentPlayerIndex];
+			copy5Player.discardKnownTicketAtIndex(copy5Player.getNumKnownDestinationTickets() - 2,
+					copy5.destinationTicketDeck);
+
+			// keep middle and right
+			final Player copy6Player = copy6.players[copy6.currentPlayerIndex];
+			copy6Player.discardKnownTicketAtIndex(copy6Player.getNumKnownDestinationTickets() - 3,
+					copy6.destinationTicketDeck);
+
+			nextStates.add(copy1);
+			nextStates.add(copy2);
+			nextStates.add(copy3);
+			nextStates.add(copy4);
+			nextStates.add(copy5);
+			nextStates.add(copy6);
+			nextStates.add(copy7);
+
+			for (final GameState state : nextStates) {
+				final TicketToRideState ticketToRideState = (TicketToRideState) state;
+
+				ticketToRideState.haveAlreadyDrawnTickets = false;
+				ticketToRideState.lastPlayerIndex = ticketToRideState.currentPlayerIndex;
+				ticketToRideState.currentPlayerIndex = ticketToRideState.getNextPlayer();
+
+				// if we are at less than 3 trains, then we must have been the one to get there
+				// first, so the game is over
+				if (temp.players[temp.currentPlayerIndex].getNumCarsRemaining() < 3) {
+					ticketToRideState.isGameOver = true;
+				}
+			}
+
+			// pick one at random
+			final int randomIndex = (int) (Math.random() * nextStates.size());
+			return nextStates.get(randomIndex);
+		}
+
+		// if this is a first turn, make a state for each possible train placement, each
+		// possible color card, and drawing tickets
+
+		// train placements
+		final Set<Board.Connection> possibleConnectionsForPlayer = temp.board
+				.getPossibleConnectionsForOwner(temp.currentPlayerIndex);
+
+		final boolean isLastTurn = temp.players[temp.currentPlayerIndex].getNumCarsRemaining() < 3;
+
+		for (final Board.Connection connection : possibleConnectionsForPlayer) {
+			if (temp.players[temp.currentPlayerIndex].canAffordConnection(connection)) {
+
+				if (!connection.getColor().equals("GRAY")) {
+					final TicketToRideState copy = new TicketToRideState(temp);
+					copy.players[copy.currentPlayerIndex].buildConnection(copy.board.getMatchingConnection(connection),
+							copy.board, copy.colorDeck, copy.currentPlayerIndex, copy.players.length);
+					copy.lastPlayerIndex = copy.currentPlayerIndex;
+					copy.currentPlayerIndex = copy.getNextPlayer();
+					copy.isGameOver = isLastTurn;
+					nextStates.add(copy);
+				} else {
+					for (final String color : ColorDeck.COLORS) {
+						if (!color.equals("WILD")) {
+							if (temp.players[temp.currentPlayerIndex].canAffordGrayWithColor(connection.getLength(),
+									color)) {
+								final TicketToRideState copy = new TicketToRideState(temp);
+								copy.players[copy.currentPlayerIndex].buildGrayConnectionWithColor(
+										copy.board.getMatchingConnection(connection), copy.board, color, copy.colorDeck,
+										copy.currentPlayerIndex, copy.players.length);
+								copy.lastPlayerIndex = copy.currentPlayerIndex;
+								copy.currentPlayerIndex = copy.getNextPlayer();
+								copy.isGameOver = isLastTurn;
+								nextStates.add(copy);
+							}
+						}
+					}
+				}
+
+			}
+		}
+
+		// color card choices
+		if (temp.colorDeck.canDrawFromTop()) {
+			final TicketToRideState takeFromDrawPileCopy = new TicketToRideState(temp);
+			takeFromDrawPileCopy.players[takeFromDrawPileCopy.currentPlayerIndex]
+					.drawUnknownColorCardFromDeck(takeFromDrawPileCopy.colorDeck);
+			takeFromDrawPileCopy.haveAlreadyTakenColorCard = true;
+			nextStates.add(takeFromDrawPileCopy);
+		}
+
+		for (final String color : temp.colorDeck.getFaceUp().keySet()) {
+			if (temp.colorDeck.getFaceUp().get(color) > 0) {
+				final TicketToRideState state = new TicketToRideState(temp);
+				state.players[state.currentPlayerIndex].drawFaceUp(color, state.colorDeck);
+				state.haveAlreadyTakenColorCard = !color.equals("WILD");
+				nextStates.add(state);
+			}
+		}
+
+		// tickets
+		if (temp.destinationTicketDeck.canDrawThreeTickets()) {
+			final TicketToRideState copy = new TicketToRideState(temp);
+			copy.players[copy.currentPlayerIndex].drawThreeTickets(copy.destinationTicketDeck);
+			copy.haveAlreadyDrawnTickets = true;
+			nextStates.add(copy);
+		}
 
 		// pick one at random
-		final int randomIndex = (int) (Math.random() * possibleStates.size());
-		return possibleStates.get(randomIndex);
+		final int randomIndex = (int) (Math.random() * nextStates.size());
+		return nextStates.get(randomIndex);
 	}
 
 	@Override
