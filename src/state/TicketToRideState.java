@@ -435,22 +435,25 @@ public class TicketToRideState implements GameState {
 	public GameState getRandomNextState() {
 		// remember that it is guaranteed that the game has not ended
 
-		// make a copy of the current state
-		final TicketToRideState copy = new TicketToRideState(this);
+		// make a copy of the current state to spawn new states off of
+		final TicketToRideState temp = new TicketToRideState(this);
 
 		// randomly fill in all unknown cards
-		for (final Player player : copy.players) {
-			copy.colorDeck.fillUnknownsRandomlyForPlayer(player);
-			copy.destinationTicketDeck.fillUnknownsRandomlyForPlayer(player);
+		for (final Player player : temp.players) {
+			temp.colorDeck.fillUnknownsRandomlyForPlayer(player);
+			temp.destinationTicketDeck.fillUnknownsRandomlyForPlayer(player);
 		}
 
 		// replenish the face up with a random card if needed and possible
 		this.colorDeck.replenishFaceUpRandomly();
 
-		// pick a random turn
+		// generate all of the possible next states
+		final List<GameState> possibleStates = new ArrayList<>();
 		// TODO
 
-		return copy;
+		// pick one at random
+		final int randomIndex = (int) (Math.random() * possibleStates.size());
+		return possibleStates.get(randomIndex);
 	}
 
 	@Override
