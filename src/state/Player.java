@@ -36,6 +36,25 @@ public class Player {
 		}
 	}
 
+	public Player(final Player player) {
+		this.knownColorCards = new HashMap<>();
+		for (final String color : player.knownColorCards.keySet()) {
+			this.knownColorCards.put(color, Integer.valueOf(player.knownColorCards.get(color)));
+		}
+
+		this.knownDestinationTickets = new ArrayList<>();
+		for (final DestinationTicket ticket : player.knownDestinationTickets) {
+			this.knownDestinationTickets.add(new DestinationTicket(ticket));
+		}
+
+		this.numUnknownColorCards = player.numUnknownColorCards;
+		this.numUnknownDestinationTickets = player.numUnknownDestinationTickets;
+		this.numCarsRemaining = player.numCarsRemaining;
+		this.score = player.score;
+		this.numCompletedTickets = player.numCompletedTickets;
+		this.longestRouteLength = player.longestRouteLength;
+	}
+
 	public void addUnknownColorCards(final int numCards) {
 		this.numUnknownColorCards += numCards;
 	}
@@ -100,5 +119,10 @@ public class Player {
 
 	public void addScore(final long amount) {
 		this.score += amount;
+	}
+
+	public void discardKnownTicketAtIndex(final int index, final DestinationTicketDeck deck) {
+		final DestinationTicket discardedTicket = this.knownDestinationTickets.remove(index);
+		deck.discardKnownTicket(discardedTicket);
 	}
 }

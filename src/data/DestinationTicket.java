@@ -12,6 +12,12 @@ public class DestinationTicket {
 		this.points = points;
 	}
 
+	public DestinationTicket(final DestinationTicket ticket) {
+		this.start = ticket.start;
+		this.end = ticket.end;
+		this.points = ticket.points;
+	}
+
 	public String getStart() {
 		return this.start;
 	}

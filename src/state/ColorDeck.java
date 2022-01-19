@@ -27,6 +27,25 @@ public class ColorDeck {
 		}
 	}
 
+	public ColorDeck(final ColorDeck deck) {
+		this.possiblyInDeck = new HashMap<>();
+		for (final String color : deck.possiblyInDeck.keySet()) {
+			this.possiblyInDeck.put(color, Long.valueOf(deck.possiblyInDeck.get(color)));
+		}
+
+		this.discard = new HashMap<>();
+		for (final String color : deck.discard.keySet()) {
+			this.discard.put(color, Long.valueOf(deck.discard.get(color)));
+		}
+
+		this.faceUp = new HashMap<>();
+		for (final String color : deck.faceUp.keySet()) {
+			this.faceUp.put(color, Long.valueOf(deck.faceUp.get(color)));
+		}
+
+		this.numCardsInDrawPile = deck.numCardsInDrawPile;
+	}
+
 	public Map<String, Long> getFaceUp() {
 		return this.faceUp;
 	}
@@ -74,5 +93,35 @@ public class ColorDeck {
 
 	public void removeCardFromDeckPossibility(final String color) {
 		this.possiblyInDeck.put(color, this.possiblyInDeck.get(color) - 1);
+	}
+
+	public void fillUnknownsRandomlyForPlayer(final Player player) {
+		final int numUnknowns = player.getNumUnknownColorCards();
+		for (int i = 0; i < numUnknowns; i++) {
+			// find total possible cards it could be
+			long total = 0;
+
+			for (final String color : this.possiblyInDeck.keySet()) {
+				total += this.possiblyInDeck.get(color);
+			}
+
+			// pick a random number from 1 to total
+			final long n = ((long) (Math.random() * total)) + 1;
+			
+			//iterate through the map until we find the nth card
+			long current = 0;
+			String colorToGive = null;
+			
+			for(final String color : this.possiblyInDeck.keySet()) {
+				current += this.possiblyInDeck.get(color);
+				
+				if(current >= n) {
+					colorToGive = color;
+					break;
+				}
+			}
+			
+			player.convertUnknownColorCardToKnownManually(colorToGive, this);
+		}
 	}
 }

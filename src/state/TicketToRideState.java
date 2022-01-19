@@ -21,6 +21,7 @@ public class TicketToRideState implements GameState {
 	private int lastPlayerIndex;
 	private int currentPlayerIndex;
 	private boolean isGameOver;
+	private boolean haveInitialTicketsBeenChosen;
 
 	public TicketToRideState(final int numPlayers, final int aiPlayerIndex, final long numCarsPerPlayer,
 			final ColorDeck colorDeck, final DestinationTicketDeck destinationTicketDeck, final Board board,
@@ -44,6 +45,24 @@ public class TicketToRideState implements GameState {
 		this.currentPlayerIndex = aiPlayerIndex;
 
 		this.isGameOver = false;
+		this.haveInitialTicketsBeenChosen = false;
+	}
+
+	public TicketToRideState(final TicketToRideState state) {
+		this.players = new Player[state.players.length];
+		for (int i = 0; i < this.players.length; i++) {
+			this.players[i] = new Player(state.players[i]);
+		}
+
+		this.colorDeck = new ColorDeck(state.colorDeck);
+		this.destinationTicketDeck = new DestinationTicketDeck(state.destinationTicketDeck);
+		this.board = new Board(state.board);
+		this.longestRoutePoints = state.longestRoutePoints;
+		this.globetrotterPoints = state.globetrotterPoints;
+		this.lastPlayerIndex = state.lastPlayerIndex;
+		this.currentPlayerIndex = state.currentPlayerIndex;
+		this.isGameOver = state.isGameOver;
+		this.haveInitialTicketsBeenChosen = state.haveInitialTicketsBeenChosen;
 	}
 
 	public void dealStartingHands(final int aiPlayerIndex, final Scanner in) {
@@ -162,7 +181,55 @@ public class TicketToRideState implements GameState {
 
 	@Override
 	public GameState getRandomNextState() {
-		// TODO Auto-generated method stub
+		// remember that it is guaranteed that the game has not ended
+
+		// make a copy of the current state
+		final TicketToRideState copy = new TicketToRideState(this);
+
+		// randomly fill in all unknown cards
+		for (final Player player : copy.players) {
+			copy.colorDeck.fillUnknownsRandomlyForPlayer(player);
+			copy.destinationTicketDeck.fillUnknownsRandomlyForPlayer(player);
+		}
+
+		// if initial tickets are not chosen yet, then the next state will be to choose
+		// a random combination of 2 or 3 of them for each player
+		if (!copy.haveInitialTicketsBeenChosen) {
+
+			// the tickets can be thought of as a 3-bit number, with 0 meaning discard and 1
+			// meaning keep
+			// as a result, the possible options are 3, 5, 6, and 7
+			final int[] choices = { 3, 5, 6, 7 };
+
+			for (final Player player : copy.players) {
+				final int randomIndex = (int) (Math.random() * 4);
+				final int choice = choices[randomIndex];
+
+				// take right 2
+				if (choice == 3) {
+					player.discardKnownTicketAtIndex(0, copy.destinationTicketDeck);
+				}
+				// take left and right
+				else if (choice == 5) {
+					player.discardKnownTicketAtIndex(1, copy.destinationTicketDeck);
+				}
+				// take left 2
+				else if (choice == 6) {
+					player.discardKnownTicketAtIndex(2, copy.destinationTicketDeck);
+				}
+				// take all 3, no action required
+			}
+
+			copy.haveInitialTicketsBeenChosen = true;
+			copy.currentPlayerIndex = 0;
+
+			return copy;
+		}
+		// otherwise, pick a random normal turn
+		else {
+			// TODO
+		}
+
 		return null;
 	}
 

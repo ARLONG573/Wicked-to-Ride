@@ -19,6 +19,23 @@ public class Board {
 		this.connectionsFromCity = new HashMap<>();
 	}
 
+	public Board(final Board board) {
+		this.allConnections = new ArrayList<>();
+		for (final Connection connection : board.allConnections) {
+			this.allConnections.add(new Connection(connection));
+		}
+
+		this.connectionsFromCity = new HashMap<>();
+		for (final String city : board.connectionsFromCity.keySet()) {
+			final Set<Connection> setCopy = new HashSet<>();
+			for (final Connection connection : board.connectionsFromCity.get(city)) {
+				setCopy.add(connection);
+			}
+
+			this.connectionsFromCity.put(city, setCopy);
+		}
+	}
+
 	public void addConnection(final String start, final String end, final long length, final String color) {
 		final Connection connection = new Connection(start, end, length, color);
 
@@ -91,6 +108,13 @@ public class Board {
 			this.color = color;
 
 			this.owner = -1;
+		}
+
+		private Connection(final Connection connection) {
+			this.start = connection.start;
+			this.end = connection.end;
+			this.length = connection.length;
+			this.color = connection.color;
 		}
 
 		public String getStart() {

@@ -19,6 +19,20 @@ public class DestinationTicketDeck {
 		this.numCardsInDrawPile = 0;
 	}
 
+	public DestinationTicketDeck(final DestinationTicketDeck deck) {
+		this.possiblyInDeck = new ArrayList<>();
+		for (final DestinationTicket ticket : deck.possiblyInDeck) {
+			this.possiblyInDeck.add(new DestinationTicket(ticket));
+		}
+
+		this.knownDiscard = new HashSet<>();
+		for (final DestinationTicket ticket : deck.knownDiscard) {
+			this.knownDiscard.add(new DestinationTicket(ticket));
+		}
+
+		this.numCardsInDrawPile = deck.numCardsInDrawPile;
+	}
+
 	public Set<DestinationTicket> getKnownDiscards() {
 		return this.knownDiscard;
 	}
@@ -45,5 +59,17 @@ public class DestinationTicketDeck {
 		}
 
 		return null;
+	}
+
+	public void fillUnknownsRandomlyForPlayer(final Player player) {
+		final int numUnknowns = player.getNumUnknownDestinationTickets();
+		for (int i = 0; i < numUnknowns; i++) {
+			final int randomIndex = (int) (Math.random() * this.possiblyInDeck.size());
+			player.convertUnknownDestinationTicketToKnownManually(this.possiblyInDeck.get(randomIndex), this);
+		}
+	}
+
+	public void discardKnownTicket(final DestinationTicket ticket) {
+		this.knownDiscard.add(ticket);
 	}
 }
