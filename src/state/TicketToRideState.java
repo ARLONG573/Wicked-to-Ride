@@ -25,6 +25,12 @@ public class TicketToRideState implements GameState {
 	private boolean haveAlreadyTakenColorCard;
 	private boolean haveAlreadyDrawnTickets;
 
+	// this is a hack that makes up for the fact that MCTS algorithm computes score
+	// twice
+	// normally not a big deal, but this scoring system mutates the Player
+	// references, so now it's a big deal
+	private boolean alreadyComputedScore;
+
 	public TicketToRideState(final int numPlayers, final int aiPlayerIndex, final long numCarsPerPlayer,
 			final ColorDeck colorDeck, final DestinationTicketDeck destinationTicketDeck, final Board board,
 			final long longestRoutePoints, final long globetrotterPoints) {
@@ -50,6 +56,7 @@ public class TicketToRideState implements GameState {
 		this.haveInitialTicketsBeenChosen = false;
 		this.haveAlreadyTakenColorCard = false;
 		this.haveAlreadyDrawnTickets = false;
+		this.alreadyComputedScore = false;
 	}
 
 	public TicketToRideState(final TicketToRideState state) {
@@ -69,6 +76,7 @@ public class TicketToRideState implements GameState {
 		this.haveInitialTicketsBeenChosen = state.haveInitialTicketsBeenChosen;
 		this.haveAlreadyTakenColorCard = state.haveAlreadyTakenColorCard;
 		this.haveAlreadyDrawnTickets = state.haveAlreadyDrawnTickets;
+		this.alreadyComputedScore = state.alreadyComputedScore;
 	}
 
 	public void dealStartingHands(final int aiPlayerIndex, final Scanner in) {
@@ -150,12 +158,13 @@ public class TicketToRideState implements GameState {
 					.println(connection.getStart() + " - " + connection.getEnd() + " (" + connection.getColor() + ")");
 		}
 		System.out.println();
-		
+
 		System.out.println();
 		final Set<Board.Connection> forbidden = this.board.getForbiddenConnectionsForPlayer(playerIndex);
 		System.out.println("Forbidden = ");
-		for(final Board.Connection connection : forbidden) {
-			System.out.println(connection.getStart() + " - " + connection.getEnd() + " (" + connection.getColor() + ")");
+		for (final Board.Connection connection : forbidden) {
+			System.out
+					.println(connection.getStart() + " - " + connection.getEnd() + " (" + connection.getColor() + ")");
 		}
 		System.out.println();
 
@@ -687,7 +696,10 @@ public class TicketToRideState implements GameState {
 		}
 
 		// Assumes that all players' destination tickets have been revealed
-		Scoring.doEndGameScoring(this.players, this.board, this.longestRoutePoints, this.globetrotterPoints);
+		if (!this.alreadyComputedScore) {
+			Scoring.doEndGameScoring(this.players, this.board, this.longestRoutePoints, this.globetrotterPoints);
+			this.alreadyComputedScore = true;
+		}
 
 		for (int i = 0; i < this.players.length; i++) {
 			if (winningPlayers.isEmpty()) {
@@ -730,11 +742,11 @@ public class TicketToRideState implements GameState {
 			}
 		}
 	}
-	
+
 	public void setCurrentPlayer(final int player) {
 		this.currentPlayerIndex = player;
 	}
-	
+
 	public void setLastPlayer(final int player) {
 		this.lastPlayerIndex = player;
 	}
