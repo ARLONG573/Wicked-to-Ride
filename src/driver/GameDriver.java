@@ -59,32 +59,33 @@ public class GameDriver {
 				// the user to make sure input is valid
 				switch (response) {
 				case "build":
+					// TODO
 					break;
 				case "color":
 					System.out.print("Which color? Or top? ");
 					final String color1 = in.next().toUpperCase();
 					in.nextLine(); // consume new line
-					
-					if(color1.equals("TOP")) {
+
+					if (color1.equals("TOP")) {
 						gameState.giveCurrentHumanPlayerTopColor();
 					} else {
 						gameState.giveCurrentHumanPlayerFaceUp(color1);
 					}
-					
+
 					gameState.replenishFaceUp(in);
-					
-					if(!color1.equals("WILD")) {
+
+					if (!color1.equals("WILD")) {
 						System.out.print("Which color? Or top? ");
 						final String color2 = in.next().toUpperCase();
-						in.nextLine(); //consume new line
-						
-						if(color2.equals("TOP")) {
+						in.nextLine(); // consume new line
+
+						if (color2.equals("TOP")) {
 							gameState.giveCurrentHumanPlayerTopColor();
 						} else {
 							gameState.giveCurrentHumanPlayerFaceUp(color2);
 						}
 					}
-					
+
 					gameState.setGameOver(gameState.getCurrentPlayerCarsRemaining() < 3);
 					gameState.setLastPlayer(gameState.getCurrentPlayer());
 					gameState.setCurrentPlayer(gameState.getNextPlayer());
