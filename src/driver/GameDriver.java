@@ -71,6 +71,8 @@ public class GameDriver {
 						gameState.giveCurrentHumanPlayerFaceUp(color1);
 					}
 					
+					gameState.replenishFaceUp(in);
+					
 					if(!color1.equals("WILD")) {
 						System.out.print("Which color? Or top? ");
 						final String color2 = in.next().toUpperCase();
