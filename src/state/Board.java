@@ -84,10 +84,10 @@ public class Board {
 					&& otherConnection.start.equals(connection.start) && otherConnection.end.equals(connection.end)) {
 
 				if (numPlayers > 3) {
-					this.forbiddenConnectionsForPlayer.get(owner).add(connection);
+					this.forbiddenConnectionsForPlayer.get(owner).add(otherConnection);
 				} else {
 					for (int i = 0; i < numPlayers; i++) {
-						this.forbiddenConnectionsForPlayer.get(i).add(connection);
+						this.forbiddenConnectionsForPlayer.get(i).add(otherConnection);
 					}
 				}
 			}
