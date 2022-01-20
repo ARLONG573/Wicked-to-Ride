@@ -166,8 +166,11 @@ public class Player {
 	}
 
 	public boolean canAffordGrayWithColor(final long length, final String color) {
-		return this.numCarsRemaining >= length
-				& this.knownColorCards.get(color) + this.knownColorCards.get("WILD") >= length;
+		// technically it isn't a requirement to have at least one of the color if you
+		// have sufficient wilds
+		// this just stops it from investigating plays that are very likely to be bad
+		return this.numCarsRemaining >= length && this.knownColorCards.get(color) > 0
+				&& this.knownColorCards.get(color) + this.knownColorCards.get("WILD") >= length;
 	}
 
 	public void buildConnection(final Board.Connection connection, final Board board, final ColorDeck deck,
@@ -218,8 +221,7 @@ public class Player {
 		final long numColor = this.knownColorCards.get(color);
 
 		if (connection.getLength() <= numColor) {
-			this.knownColorCards.put(color,
-					this.knownColorCards.get(color) - connection.getLength());
+			this.knownColorCards.put(color, this.knownColorCards.get(color) - connection.getLength());
 
 			deck.sendKnownToDiscard(connection.getLength(), color);
 		} else {
