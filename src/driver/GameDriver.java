@@ -48,18 +48,34 @@ public class GameDriver {
 			}
 			// Get human turn
 			else {
-				gameState.setLastPlayer(1);
-				gameState.setCurrentPlayer(aiPlayer);
-//				while(true){
-//					
-//				}
-//				gameState.replenishFaceUp(in);
-//				// TODO
-//				gameState.printPlayerInfo(gameState.getLastPlayer());
-//
-//				if (gameState.isGameOver()) {
-//					gameState.revealHumanDestinationTickets(aiPlayer, in);
-//				}
+				gameState.replenishFaceUp(in);
+
+				System.out.println("Player " + gameState.getCurrentPlayer() + "'s turn!");
+				System.out.print("build, color, or ticket? ");
+				final String response = in.next();
+				in.nextLine(); // consume new line
+
+				// for all of these cases, just assume that it's possible since the onus is on
+				// the user to make sure input is valid
+				switch (response) {
+				case "build":
+					break;
+				case "color":
+					break;
+				case "ticket":
+					System.out.print("How many did they keep? ");
+					final int numKept = in.nextInt();
+					in.nextLine(); //consume new line
+					
+					gameState.drawAndKeepDestinationTicketsForCurrentHuman(numKept);
+					break;
+				}
+
+				gameState.printPlayerInfo(gameState.getLastPlayer());
+
+				if (gameState.isGameOver()) {
+					gameState.revealHumanDestinationTickets(aiPlayer, in);
+				}
 			}
 		}
 

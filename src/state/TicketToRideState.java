@@ -143,14 +143,6 @@ public class TicketToRideState implements GameState {
 		System.out.println("Unknown destination tickets = " + player.getNumUnknownDestinationTickets());
 
 		System.out.println();
-		final Set<DestinationTicket> ticketsDiscard = this.destinationTicketDeck.getKnownDiscards();
-		System.out.println("Known destination ticket discards = ");
-		for (final DestinationTicket ticket : ticketsDiscard) {
-			System.out.println(ticket.getStart() + " - " + ticket.getEnd());
-		}
-		System.out.println();
-
-		System.out.println();
 		final List<Board.Connection> connections = this.board.getConnectionsForPlayer(playerIndex);
 		System.out.println("Connections = ");
 		for (final Board.Connection connection : connections) {
@@ -184,6 +176,19 @@ public class TicketToRideState implements GameState {
 				this.destinationTicketDeck.addDiscards(3 - numTicketsKept);
 			}
 		}
+	}
+
+	public void drawAndKeepDestinationTicketsForCurrentHuman(final int numKept) {
+		final Player player = this.players[this.currentPlayerIndex];
+
+		player.drawThreeTickets(this.destinationTicketDeck);
+		player.setNumUnknownDestinationTickets(player.getNumUnknownDestinationTickets() - (3 - numKept));
+		this.destinationTicketDeck.addDiscards(3 - numKept);
+
+		// this is a full turn for human, so do upkeep
+		this.lastPlayerIndex = this.currentPlayerIndex;
+		this.currentPlayerIndex = this.getNextPlayer();
+		this.isGameOver = player.getNumCarsRemaining() < 3;
 	}
 
 	public int getCurrentPlayer() {
