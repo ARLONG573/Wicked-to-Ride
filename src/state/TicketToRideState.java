@@ -150,6 +150,14 @@ public class TicketToRideState implements GameState {
 					.println(connection.getStart() + " - " + connection.getEnd() + " (" + connection.getColor() + ")");
 		}
 		System.out.println();
+		
+		System.out.println();
+		final Set<Board.Connection> forbidden = this.board.getForbiddenConnectionsForPlayer(playerIndex);
+		System.out.println("Forbidden = ");
+		for(final Board.Connection connection : forbidden) {
+			System.out.println(connection.getStart() + " - " + connection.getEnd() + " (" + connection.getColor() + ")");
+		}
+		System.out.println();
 
 		System.out.println("Score = " + player.getScore());
 		System.out.println();
@@ -220,15 +228,19 @@ public class TicketToRideState implements GameState {
 			copy2.players[copy2.currentPlayerIndex].discardKnownTicketAtIndex(1, copy2.destinationTicketDeck);
 			copy3.players[copy3.currentPlayerIndex].discardKnownTicketAtIndex(2, copy3.destinationTicketDeck);
 
+			copy1.lastPlayerIndex = copy1.currentPlayerIndex;
 			copy1.currentPlayerIndex = 0;
 			copy1.haveInitialTicketsBeenChosen = true;
 
+			copy2.lastPlayerIndex = copy2.currentPlayerIndex;
 			copy2.currentPlayerIndex = 0;
 			copy2.haveInitialTicketsBeenChosen = true;
 
+			copy3.lastPlayerIndex = copy3.currentPlayerIndex;
 			copy3.currentPlayerIndex = 0;
 			copy3.haveInitialTicketsBeenChosen = true;
 
+			copy4.lastPlayerIndex = copy4.currentPlayerIndex;
 			copy4.currentPlayerIndex = 0;
 			copy4.haveInitialTicketsBeenChosen = true;
 
@@ -717,5 +729,13 @@ public class TicketToRideState implements GameState {
 				}
 			}
 		}
+	}
+	
+	public void setCurrentPlayer(final int player) {
+		this.currentPlayerIndex = player;
+	}
+	
+	public void setLastPlayer(final int player) {
+		this.lastPlayerIndex = player;
 	}
 }

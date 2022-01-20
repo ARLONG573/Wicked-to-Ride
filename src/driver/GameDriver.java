@@ -48,9 +48,11 @@ public class GameDriver {
 			}
 			// Get human turn
 			else {
-				while(true){
-					
-				}
+				gameState.setLastPlayer(1);
+				gameState.setCurrentPlayer(aiPlayer);
+//				while(true){
+//					
+//				}
 //				gameState.replenishFaceUp(in);
 //				// TODO
 //				gameState.printPlayerInfo(gameState.getLastPlayer());

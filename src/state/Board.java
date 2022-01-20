@@ -69,6 +69,10 @@ public class Board {
 		return connections;
 	}
 
+	public Set<Connection> getForbiddenConnectionsForPlayer(final int player) {
+		return this.forbiddenConnectionsForPlayer.get(player);
+	}
+
 	public void giveOwnershipToPlayer(final Connection connection, final int owner, final int numPlayers) {
 		connection.owner = owner;
 
@@ -90,8 +94,23 @@ public class Board {
 		}
 	}
 
+	private boolean alreadyHasConnectionBetweenCities(final String start, final String end) {
+		for (final Connection connection : this.allConnections) {
+			if (connection.start.equals(start) && connection.end.equals(end)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	public void addConnection(final String start, final String end, final long length, final String color) {
-		final Connection connection = new Connection(start, end, length, color);
+		Connection connection = null;
+		if (this.alreadyHasConnectionBetweenCities(start, end)) {
+			connection = new Connection(start, end, length, color, 2);
+		} else {
+			connection = new Connection(start, end, length, color, 1);
+		}
 
 		this.allConnections.add(connection);
 
@@ -146,7 +165,7 @@ public class Board {
 		for (final Connection otherConnection : this.allConnections) {
 			if (otherConnection.start.equals(connection.start) && otherConnection.end.equals(connection.end)
 					&& otherConnection.length == connection.length && otherConnection.color.equals(connection.color)
-					&& otherConnection.owner == connection.owner) {
+					&& otherConnection.id == connection.id && otherConnection.owner == connection.owner) {
 				return otherConnection;
 			}
 		}
@@ -164,14 +183,16 @@ public class Board {
 		private final String end;
 		private final long length;
 		private final String color;
+		private final int id; // used to tell apart double routes with the same length and color
 
 		private int owner;
 
-		private Connection(final String start, final String end, final long length, final String color) {
+		private Connection(final String start, final String end, final long length, final String color, final int id) {
 			this.start = start;
 			this.end = end;
 			this.length = length;
 			this.color = color;
+			this.id = id;
 
 			this.owner = -1;
 		}
@@ -181,6 +202,7 @@ public class Board {
 			this.end = connection.end;
 			this.length = connection.length;
 			this.color = connection.color;
+			this.id = connection.id;
 			this.owner = connection.owner;
 		}
 
