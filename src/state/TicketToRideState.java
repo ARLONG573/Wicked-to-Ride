@@ -755,4 +755,25 @@ public class TicketToRideState implements GameState {
 	public void setLastPlayer(final int player) {
 		this.lastPlayerIndex = player;
 	}
+
+	public void giveCurrentHumanPlayerTopColor() {
+		final Player player = this.players[this.currentPlayerIndex];
+
+		player.addUnknownColorCards(1);
+		this.colorDeck.drawUnknownFromDeck();
+	}
+
+	public void giveCurrentHumanPlayerFaceUp(final String color) {
+		final Player player = this.players[this.currentPlayerIndex];
+
+		player.drawFaceUp(color, this.colorDeck);
+	}
+
+	public long getCurrentPlayerCarsRemaining() {
+		return this.players[this.currentPlayerIndex].getNumCarsRemaining();
+	}
+
+	public void setGameOver(final boolean isGameOver) {
+		this.isGameOver = isGameOver;
+	}
 }

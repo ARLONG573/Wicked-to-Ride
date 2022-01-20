@@ -61,12 +61,37 @@ public class GameDriver {
 				case "build":
 					break;
 				case "color":
+					System.out.print("Which color? Or top? ");
+					final String color1 = in.next().toUpperCase();
+					in.nextLine(); // consume new line
+					
+					if(color1.equals("TOP")) {
+						gameState.giveCurrentHumanPlayerTopColor();
+					} else {
+						gameState.giveCurrentHumanPlayerFaceUp(color1);
+					}
+					
+					if(!color1.equals("WILD")) {
+						System.out.print("Which color? Or top? ");
+						final String color2 = in.next().toUpperCase();
+						in.nextLine(); //consume new line
+						
+						if(color2.equals("TOP")) {
+							gameState.giveCurrentHumanPlayerTopColor();
+						} else {
+							gameState.giveCurrentHumanPlayerFaceUp(color2);
+						}
+					}
+					
+					gameState.setGameOver(gameState.getCurrentPlayerCarsRemaining() < 3);
+					gameState.setLastPlayer(gameState.getCurrentPlayer());
+					gameState.setCurrentPlayer(gameState.getNextPlayer());
 					break;
 				case "ticket":
 					System.out.print("How many did they keep? ");
 					final int numKept = in.nextInt();
-					in.nextLine(); //consume new line
-					
+					in.nextLine(); // consume new line
+
 					gameState.drawAndKeepDestinationTicketsForCurrentHuman(numKept);
 					break;
 				}
