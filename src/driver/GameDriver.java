@@ -8,6 +8,7 @@ import mcts.MCTS;
 import state.Board;
 import state.ColorDeck;
 import state.DestinationTicketDeck;
+import state.Player;
 import state.TicketToRideState;
 
 public class GameDriver {
@@ -170,5 +171,9 @@ public class GameDriver {
 
 		in.close();
 		System.out.println("Winning players: " + gameState.getWinningPlayers());
+		System.out.println("Scores:");
+		for(final Player player : gameState.getPlayers()) {
+			System.out.println(player.getScore());
+		}
 	}
 }

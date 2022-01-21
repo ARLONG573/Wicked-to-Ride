@@ -147,8 +147,8 @@ public class TicketToRideState implements GameState {
 		final List<Board.Connection> connections = this.board.getConnectionsForPlayer(playerIndex);
 		System.out.println("Connections = ");
 		for (final Board.Connection connection : connections) {
-			System.out
-					.println(connection.getStart() + " - " + connection.getEnd() + " (" + connection.getColor() + ")");
+			System.out.println(connection.getStart() + " - " + connection.getEnd() + " (" + connection.getColor() + ") "
+					+ connection.getId());
 		}
 		System.out.println();
 
@@ -156,8 +156,8 @@ public class TicketToRideState implements GameState {
 		final Set<Board.Connection> forbidden = this.board.getForbiddenConnectionsForPlayer(playerIndex);
 		System.out.println("Forbidden = ");
 		for (final Board.Connection connection : forbidden) {
-			System.out
-					.println(connection.getStart() + " - " + connection.getEnd() + " (" + connection.getColor() + ")");
+			System.out.println(connection.getStart() + " - " + connection.getEnd() + " (" + connection.getColor() + ") "
+					+ connection.getId());
 		}
 		System.out.println();
 
@@ -443,7 +443,14 @@ public class TicketToRideState implements GameState {
 			if (this.colorDeck.getFaceUp().get(color) > 0) {
 				final TicketToRideState state = new TicketToRideState(this);
 				state.players[state.currentPlayerIndex].drawFaceUp(color, state.colorDeck);
-				state.haveAlreadyTakenColorCard = !color.equals("WILD");
+
+				if (color.equals("WILD")) {
+					state.isGameOver = state.players[state.currentPlayerIndex].getNumCarsRemaining() < 3;
+					state.lastPlayerIndex = state.currentPlayerIndex;
+					state.currentPlayerIndex = state.getNextPlayer();
+				} else {
+					state.haveAlreadyTakenColorCard = true;
+				}
 				nextStates.add(state);
 			}
 		}
@@ -669,7 +676,14 @@ public class TicketToRideState implements GameState {
 			if (temp.colorDeck.getFaceUp().get(color) > 0) {
 				final TicketToRideState state = new TicketToRideState(temp);
 				state.players[state.currentPlayerIndex].drawFaceUp(color, state.colorDeck);
-				state.haveAlreadyTakenColorCard = !color.equals("WILD");
+
+				if (color.equals("WILD")) {
+					state.isGameOver = state.players[state.currentPlayerIndex].getNumCarsRemaining() < 3;
+					state.lastPlayerIndex = state.currentPlayerIndex;
+					state.currentPlayerIndex = state.getNextPlayer();
+				} else {
+					state.haveAlreadyTakenColorCard = true;
+				}
 				nextStates.add(state);
 			}
 		}
@@ -797,5 +811,9 @@ public class TicketToRideState implements GameState {
 		this.lastPlayerIndex = this.currentPlayerIndex;
 		this.currentPlayerIndex = this.getNextPlayer();
 		this.isGameOver = isLastTurn;
+	}
+
+	public Player[] getPlayers() {
+		return this.players;
 	}
 }

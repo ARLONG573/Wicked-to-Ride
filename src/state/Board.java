@@ -80,9 +80,9 @@ public class Board {
 		// if less than 4 players, forbid EVERY player from taking any other open route
 		// between the same two cities
 		for (final Connection otherConnection : this.allConnections) {
-			if (!otherConnection.equals(connection) && otherConnection.owner == -1
-					&& otherConnection.start.equals(connection.start) && otherConnection.end.equals(connection.end)) {
-
+			if (otherConnection.owner == -1 && otherConnection.start.equals(connection.start)
+					&& otherConnection.end.equals(connection.end) && otherConnection.id != connection.id) {
+				
 				if (numPlayers > 3) {
 					this.forbiddenConnectionsForPlayer.get(owner).add(otherConnection);
 				} else {
@@ -224,6 +224,10 @@ public class Board {
 
 		public int getOwner() {
 			return this.owner;
+		}
+
+		public int getId() {
+			return this.id;
 		}
 	}
 }
