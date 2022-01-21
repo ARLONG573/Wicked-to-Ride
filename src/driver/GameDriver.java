@@ -1,6 +1,8 @@
 package driver;
 
+import java.util.Comparator;
 import java.util.Scanner;
+import java.util.TreeSet;
 
 import mcts.MCTS;
 import state.Board;
@@ -59,7 +61,66 @@ public class GameDriver {
 				// the user to make sure input is valid
 				switch (response) {
 				case "build":
-					// TODO
+					System.out.println("List of available connections: ");
+					final TreeSet<Board.Connection> sorted = new TreeSet<>(new Comparator<Board.Connection>() {
+
+						@Override
+						public int compare(final Board.Connection c1, final Board.Connection c2) {
+							if (c1.getLength() < c2.getLength())
+								return -1;
+							if (c1.getLength() > c2.getLength())
+								return 1;
+
+							final int colorComp = c1.getColor().compareTo(c2.getColor());
+							if (colorComp != 0)
+								return colorComp;
+
+							final int startComp = c1.getStart().compareTo(c2.getStart());
+							if (startComp != 0)
+								return startComp;
+
+							return c1.getEnd().compareTo(c2.getEnd());
+						}
+
+					});
+					for (final Board.Connection connection : gameState.getBoard()
+							.getPossibleConnectionsForOwner(gameState.getCurrentPlayer())) {
+						sorted.add(connection);
+					}
+					for (final Board.Connection connection : sorted) {
+						System.out.println(connection.getLength() + " " + connection.getColor() + " "
+								+ connection.getStart() + " - " + connection.getEnd());
+					}
+					System.out.println();
+
+					System.out.print("Start: ");
+					final String start = in.nextLine().toUpperCase();
+					System.out.print("End: ");
+					final String end = in.nextLine().toUpperCase();
+					System.out.print("Color: ");
+					final String color = in.next().toUpperCase();
+					in.nextLine(); // consume new line
+					System.out.print("Length: ");
+					final long length = in.nextLong();
+					in.nextLine(); // consume new line
+					System.out.print("How many wilds used? ");
+					final long wilds = in.nextLong();
+					in.nextLine();// consume new line
+
+					for (final Board.Connection connection : sorted) {
+						if (connection.getStart().equals(start) && connection.getEnd().equals(end)
+								&& connection.getColor().equals(color) && connection.getLength() == length) {
+
+							String optColor = connection.getColor();
+
+							if (optColor.equals("GRAY")) {
+								System.out.print("What color used to pay? ");
+								optColor = in.next().toUpperCase();
+								in.nextLine(); // consume new line
+							}
+							gameState.buildConnectionForCurrentHumanPlayer(connection, optColor, wilds);
+						}
+					}
 					break;
 				case "color":
 					System.out.print("Which color? Or top? ");

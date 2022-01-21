@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import data.DestinationTicket;
+import state.Board.Connection;
 
 public class Player {
 
@@ -243,8 +244,9 @@ public class Player {
 			this.score += 7;
 		} else if (connection.getLength() == 5) {
 			this.score += 10;
-		} else
+		} else {
 			this.score += 15;
+		}
 
 		// adjust board
 		board.giveOwnershipToPlayer(connection, currentPlayer, numPlayers);
@@ -253,5 +255,48 @@ public class Player {
 	public void drawThreeTickets(final DestinationTicketDeck deck) {
 		this.numUnknownDestinationTickets += 3;
 		deck.drawThreeUnknown();
+	}
+
+	public void buildHumanConnection(final Connection connection, final String colorPayed, final long wilds,
+			final ColorDeck colorDeck, final Board board, final int currentPlayer, final int numPlayers) {
+		// pay cars
+		this.numCarsRemaining -= connection.getLength();
+
+		// pay cards and send to discard (convert cards to known first)
+		final long numColorSpend = connection.getLength() - wilds;
+		final long numColorKnown = this.knownColorCards.get(colorPayed);
+		final long numWildsKnown = this.knownColorCards.get("WILD");
+
+		for (long i = numColorKnown; i < numColorSpend; i++) {
+			this.convertUnknownColorCardToKnownManually(colorPayed, colorDeck);
+		}
+
+		for (long i = numWildsKnown; i < wilds; i++) {
+			this.convertUnknownColorCardToKnownManually("WILD", colorDeck);
+		}
+
+		this.knownColorCards.put(colorPayed, this.knownColorCards.get(colorPayed) - numColorSpend);
+		this.knownColorCards.put("WILD", this.knownColorCards.get("WILD") - wilds);
+
+		colorDeck.sendKnownToDiscard(numColorSpend, colorPayed);
+		colorDeck.sendKnownToDiscard(wilds, "WILD");
+
+		// add score
+		if (connection.getLength() == 1) {
+			this.score += 1;
+		} else if (connection.getLength() == 2) {
+			this.score += 2;
+		} else if (connection.getLength() == 3) {
+			this.score += 4;
+		} else if (connection.getLength() == 4) {
+			this.score += 7;
+		} else if (connection.getLength() == 5) {
+			this.score += 10;
+		} else {
+			this.score += 15;
+		}
+
+		// adjust board
+		board.giveOwnershipToPlayer(connection, currentPlayer, numPlayers);
 	}
 }

@@ -8,6 +8,7 @@ import java.util.Set;
 import data.DestinationTicket;
 import mcts.api.GameState;
 import scoring.Scoring;
+import state.Board.Connection;
 
 public class TicketToRideState implements GameState {
 
@@ -775,5 +776,22 @@ public class TicketToRideState implements GameState {
 
 	public void setGameOver(final boolean isGameOver) {
 		this.isGameOver = isGameOver;
+	}
+
+	public Board getBoard() {
+		return this.board;
+	}
+
+	public void buildConnectionForCurrentHumanPlayer(final Connection connection, final String colorPayed,
+			final long wilds) {
+		final Player player = this.players[this.currentPlayerIndex];
+		final boolean isLastTurn = player.getNumCarsRemaining() < 3;
+
+		player.buildHumanConnection(connection, colorPayed, wilds, this.colorDeck, this.board, this.currentPlayerIndex,
+				this.players.length);
+
+		this.lastPlayerIndex = this.currentPlayerIndex;
+		this.currentPlayerIndex = this.getNextPlayer();
+		this.isGameOver = isLastTurn;
 	}
 }
