@@ -299,4 +299,14 @@ public class Player {
 		// adjust board
 		board.giveOwnershipToPlayer(connection, currentPlayer, numPlayers);
 	}
+
+	public boolean hasCompletedAllKnownTickets(final Board board, final int owner) {
+		for (final DestinationTicket ticket : this.knownDestinationTickets) {
+			if (!board.isCompleteTicket(ticket, owner)) {
+				return false;
+			}
+		}
+
+		return true;
+	}
 }
