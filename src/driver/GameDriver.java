@@ -4,6 +4,7 @@ import java.util.Comparator;
 import java.util.Scanner;
 import java.util.TreeSet;
 
+import data.DestinationTicket;
 import mcts.MCTS;
 import state.Board;
 import state.ColorDeck;
@@ -173,7 +174,11 @@ public class GameDriver {
 		System.out.println("Winning players: " + gameState.getWinningPlayers());
 		System.out.println("Scores:");
 		for (final Player player : gameState.getPlayers()) {
-			System.out.println(player.getScore() + " with " + player.getNumCompletedTickets() + " completed tickets");
+			System.out.println(
+					player.getScore() + " with " + player.getNumCompletedTickets() + " completed tickets out of:");
+			for (final DestinationTicket ticket : player.getKnownDestinationTickets()) {
+				System.out.println(ticket.getStart() + " - " + ticket.getEnd() + " " + ticket.getPoints());
+			}
 		}
 	}
 }

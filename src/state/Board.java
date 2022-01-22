@@ -32,25 +32,25 @@ public class Board {
 
 	public Board(final Board board) {
 		this.allConnections = new ArrayList<>();
-		for (final Connection connection : board.allConnections) {
-			this.allConnections.add(new Connection(connection));
-		}
-
 		this.connectionsFromCity = new HashMap<>();
-		for (final String city : board.connectionsFromCity.keySet()) {
-			final Set<Connection> setCopy = new HashSet<>();
-			for (final Connection connection : board.connectionsFromCity.get(city)) {
-				setCopy.add(new Connection(connection));
-			}
 
-			this.connectionsFromCity.put(city, setCopy);
+		for (final Connection connection : board.allConnections) {
+			final Connection newConnection = new Connection(connection.start, connection.end, connection.length,
+					connection.color, connection.id, connection.owner);
+
+			this.allConnections.add(newConnection);
+
+			this.connectionsFromCity.putIfAbsent(newConnection.start, new HashSet<>());
+			this.connectionsFromCity.putIfAbsent(newConnection.end, new HashSet<>());
+			this.connectionsFromCity.get(newConnection.start).add(newConnection);
+			this.connectionsFromCity.get(newConnection.end).add(newConnection);
 		}
-
+		
 		this.forbiddenConnectionsForPlayer = new HashMap<>();
 		for (final Integer owner : board.forbiddenConnectionsForPlayer.keySet()) {
 			final Set<Connection> setCopy = new HashSet<>();
 			for (final Connection connection : board.forbiddenConnectionsForPlayer.get(owner)) {
-				setCopy.add(new Connection(connection));
+				setCopy.add(this.getMatchingConnection(connection));
 			}
 
 			this.forbiddenConnectionsForPlayer.put(owner, setCopy);
@@ -82,7 +82,7 @@ public class Board {
 		for (final Connection otherConnection : this.allConnections) {
 			if (otherConnection.owner == -1 && otherConnection.start.equals(connection.start)
 					&& otherConnection.end.equals(connection.end) && otherConnection.id != connection.id) {
-				
+
 				if (numPlayers > 3) {
 					this.forbiddenConnectionsForPlayer.get(owner).add(otherConnection);
 				} else {
@@ -107,9 +107,9 @@ public class Board {
 	public void addConnection(final String start, final String end, final long length, final String color) {
 		Connection connection = null;
 		if (this.alreadyHasConnectionBetweenCities(start, end)) {
-			connection = new Connection(start, end, length, color, 2);
+			connection = new Connection(start, end, length, color, 2, -1);
 		} else {
-			connection = new Connection(start, end, length, color, 1);
+			connection = new Connection(start, end, length, color, 1, -1);
 		}
 
 		this.allConnections.add(connection);
@@ -187,14 +187,14 @@ public class Board {
 
 		private int owner;
 
-		private Connection(final String start, final String end, final long length, final String color, final int id) {
+		private Connection(final String start, final String end, final long length, final String color, final int id,
+				final int owner) {
 			this.start = start;
 			this.end = end;
 			this.length = length;
 			this.color = color;
 			this.id = id;
-
-			this.owner = -1;
+			this.owner = owner;
 		}
 
 		private Connection(final Connection connection) {
