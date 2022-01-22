@@ -152,15 +152,6 @@ public class TicketToRideState implements GameState {
 		}
 		System.out.println();
 
-		System.out.println();
-		final Set<Board.Connection> forbidden = this.board.getForbiddenConnectionsForPlayer(playerIndex);
-		System.out.println("Forbidden = ");
-		for (final Board.Connection connection : forbidden) {
-			System.out.println(connection.getStart() + " - " + connection.getEnd() + " (" + connection.getColor() + ") "
-					+ connection.getId());
-		}
-		System.out.println();
-
 		System.out.println("Score = " + player.getScore());
 		System.out.println();
 	}
