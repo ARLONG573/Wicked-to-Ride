@@ -96,6 +96,10 @@ public class Board {
 			}
 		}
 
+		// further reduce options by only considering those that are useful for
+		// completing our tickets
+		//TODO what is a "useful" connection?
+		
 		return connections;
 
 	}
