@@ -481,10 +481,6 @@ public class TicketToRideState implements GameState {
 			final Player player = temp.players[i];
 			temp.colorDeck.fillUnknownsRandomlyForPlayer(player);
 			temp.destinationTicketDeck.fillUnknownsForPlayerSmartly(player, temp.board, i);
-			for(final DestinationTicket ticket : player.getKnownDestinationTickets()) {
-				System.out.println(ticket.getStart() + " - " + ticket.getEnd());
-			}
-			System.out.println();
 		}
 
 		// replenish the face up with a random card if needed and possible
