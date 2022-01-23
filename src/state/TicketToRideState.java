@@ -385,7 +385,7 @@ public class TicketToRideState implements GameState {
 
 		// train placements
 		final Set<Board.Connection> possibleConnectionsForPlayer = this.board
-				.getPossibleConnectionsForOwner(this.currentPlayerIndex);
+				.getReasonableConnectionsForOwner(this.players[this.currentPlayerIndex], this.currentPlayerIndex);
 
 		final boolean isLastTurn = this.players[this.currentPlayerIndex].getNumCarsRemaining() < 3;
 
@@ -624,7 +624,7 @@ public class TicketToRideState implements GameState {
 
 		// train placements
 		final Set<Board.Connection> possibleConnectionsForPlayer = temp.board
-				.getPossibleConnectionsForOwner(temp.currentPlayerIndex);
+				.getReasonableConnectionsForOwner(temp.players[temp.currentPlayerIndex], temp.currentPlayerIndex);
 
 		final boolean isLastTurn = temp.players[temp.currentPlayerIndex].getNumCarsRemaining() < 3;
 

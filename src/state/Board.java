@@ -69,6 +69,37 @@ public class Board {
 		return connections;
 	}
 
+	public Set<Connection> getReasonableConnectionsForOwner(final Player player, final int owner) {
+		// reasonable is going to mean either connected to its structure OR connected to
+		// a city on one of its tickets
+		final Set<Connection> connections = new HashSet<>();
+
+		for (final Connection possible : this.getPossibleConnectionsForOwner(owner)) {
+			boolean alreadyAdded = false;
+
+			// check tickets
+			for (final DestinationTicket ticket : player.getKnownDestinationTickets()) {
+				if (ticket.getStart().equals(possible.start) || ticket.getEnd().equals(possible.start)
+						|| ticket.getStart().equals(possible.end) || ticket.getEnd().equals(possible.end)) {
+
+					connections.add(possible);
+					alreadyAdded = true;
+					break;
+				}
+			}
+
+			// check structure
+			if (!alreadyAdded) {
+				if (this.playerOwnsCity(possible.start, owner) || this.playerOwnsCity(possible.end, owner)) {
+					connections.add(possible);
+				}
+			}
+		}
+
+		return connections;
+
+	}
+
 	public Set<Connection> getForbiddenConnectionsForPlayer(final int player) {
 		return this.forbiddenConnectionsForPlayer.get(player);
 	}
