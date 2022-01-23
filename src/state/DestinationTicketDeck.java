@@ -25,12 +25,12 @@ public class DestinationTicketDeck {
 	public DestinationTicketDeck(final DestinationTicketDeck deck) {
 		this.possiblyInDeck = new ArrayList<>();
 		for (final DestinationTicket ticket : deck.possiblyInDeck) {
-			this.possiblyInDeck.add(new DestinationTicket(ticket));
+			this.possiblyInDeck.add(ticket);
 		}
 
 		this.knownDiscard = new HashSet<>();
 		for (final DestinationTicket ticket : deck.knownDiscard) {
-			this.knownDiscard.add(new DestinationTicket(ticket));
+			this.knownDiscard.add(ticket);
 		}
 
 		this.numCardsInDrawPile = deck.numCardsInDrawPile;
@@ -69,11 +69,61 @@ public class DestinationTicketDeck {
 		return null;
 	}
 
-	public void fillUnknownsRandomlyForPlayer(final Player player) {
-		final int numUnknowns = player.getNumUnknownDestinationTickets();
-		for (int i = 0; i < numUnknowns; i++) {
-			final int randomIndex = (int) (Math.random() * this.possiblyInDeck.size());
-			player.convertUnknownDestinationTicketToKnownManually(this.possiblyInDeck.get(randomIndex), this);
+	public void fillUnknownsForPlayerSmartly(final Player player, final Board board, final int playerIndex) {
+		if (player.getNumUnknownDestinationTickets() == 0) {
+			return;
+		}
+
+		// the closer they are to completing a ticket, the more likely they are to have
+		// it in their hand
+		final List<DestinationTicket> alreadyCompleted = new ArrayList<>();
+		final List<DestinationTicket> bothCitiesClaimed = new ArrayList<>();
+		final List<DestinationTicket> oneCityClaimed = new ArrayList<>();
+		final List<DestinationTicket> noCitiesClaimed = new ArrayList<>();
+
+		for (final DestinationTicket ticket : this.possiblyInDeck) {
+			if (board.isCompleteTicket(ticket, playerIndex)) {
+				alreadyCompleted.add(ticket);
+			} else {
+				final boolean startClaimed = board.playerOwnsCity(ticket.getStart(), playerIndex);
+				final boolean endClaimed = board.playerOwnsCity(ticket.getEnd(), playerIndex);
+
+				if (startClaimed && endClaimed) {
+					bothCitiesClaimed.add(ticket);
+				} else if (startClaimed || endClaimed) {
+					oneCityClaimed.add(ticket);
+				} else {
+					noCitiesClaimed.add(ticket);
+				}
+			}
+		}
+
+		while (player.getNumUnknownDestinationTickets() > 0) {
+			if (!alreadyCompleted.isEmpty()) {
+				final int randomIndex = (int) (Math.random() * alreadyCompleted.size());
+				final DestinationTicket ticket = alreadyCompleted.remove(randomIndex);
+				player.convertUnknownDestinationTicketToKnownManually(ticket, this);
+				continue;
+			}
+
+			if (!bothCitiesClaimed.isEmpty()) {
+				final int randomIndex = (int) (Math.random() * bothCitiesClaimed.size());
+				final DestinationTicket ticket = bothCitiesClaimed.remove(randomIndex);
+				player.convertUnknownDestinationTicketToKnownManually(ticket, this);
+				continue;
+			}
+
+			if (!oneCityClaimed.isEmpty()) {
+				final int randomIndex = (int) (Math.random() * oneCityClaimed.size());
+				final DestinationTicket ticket = oneCityClaimed.remove(randomIndex);
+				player.convertUnknownDestinationTicketToKnownManually(ticket, this);
+				continue;
+			}
+
+			final int randomIndex = (int) (Math.random() * noCitiesClaimed.size());
+			final DestinationTicket ticket = noCitiesClaimed.remove(randomIndex);
+			player.convertUnknownDestinationTicketToKnownManually(ticket, this);
+			continue;
 		}
 	}
 

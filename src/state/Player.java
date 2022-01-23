@@ -45,7 +45,7 @@ public class Player {
 
 		this.knownDestinationTickets = new ArrayList<>();
 		for (final DestinationTicket ticket : player.knownDestinationTickets) {
-			this.knownDestinationTickets.add(new DestinationTicket(ticket));
+			this.knownDestinationTickets.add(ticket);
 		}
 
 		this.numUnknownColorCards = player.numUnknownColorCards;

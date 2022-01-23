@@ -45,7 +45,7 @@ public class Board {
 			this.connectionsFromCity.get(newConnection.start).add(newConnection);
 			this.connectionsFromCity.get(newConnection.end).add(newConnection);
 		}
-		
+
 		this.forbiddenConnectionsForPlayer = new HashMap<>();
 		for (final Integer owner : board.forbiddenConnectionsForPlayer.keySet()) {
 			final Set<Connection> setCopy = new HashSet<>();
@@ -130,6 +130,16 @@ public class Board {
 		}
 
 		return connections;
+	}
+
+	public boolean playerOwnsCity(final String city, final int owner) {
+		for (final Connection connection : this.connectionsFromCity.get(city)) {
+			if (connection.owner == owner) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	public boolean isCompleteTicket(final DestinationTicket ticket, final int owner) {

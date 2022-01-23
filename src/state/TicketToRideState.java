@@ -147,8 +147,8 @@ public class TicketToRideState implements GameState {
 		final List<Board.Connection> connections = this.board.getConnectionsForPlayer(playerIndex);
 		System.out.println("Connections = ");
 		for (final Board.Connection connection : connections) {
-			System.out.println(connection.getStart() + " - " + connection.getEnd() + " (" + connection.getColor() + ") "
-					+ connection.getId());
+			System.out
+					.println(connection.getStart() + " - " + connection.getEnd() + " (" + connection.getColor() + ")");
 		}
 		System.out.println();
 
@@ -475,10 +475,16 @@ public class TicketToRideState implements GameState {
 		// make a copy of the current state to spawn new states off of
 		final TicketToRideState temp = new TicketToRideState(this);
 
-		// randomly fill in all unknown cards
-		for (final Player player : temp.players) {
+		// randomly fill in all unknown color cards
+		// try to make some smart guesses about human destination tickets
+		for (int i = 0; i < temp.players.length; i++) {
+			final Player player = temp.players[i];
 			temp.colorDeck.fillUnknownsRandomlyForPlayer(player);
-			temp.destinationTicketDeck.fillUnknownsRandomlyForPlayer(player);
+			temp.destinationTicketDeck.fillUnknownsForPlayerSmartly(player, temp.board, i);
+			for(final DestinationTicket ticket : player.getKnownDestinationTickets()) {
+				System.out.println(ticket.getStart() + " - " + ticket.getEnd());
+			}
+			System.out.println();
 		}
 
 		// replenish the face up with a random card if needed and possible
