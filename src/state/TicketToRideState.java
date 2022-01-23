@@ -427,6 +427,7 @@ public class TicketToRideState implements GameState {
 			takeFromDrawPileCopy.players[takeFromDrawPileCopy.currentPlayerIndex]
 					.drawUnknownColorCardFromDeck(takeFromDrawPileCopy.colorDeck);
 			takeFromDrawPileCopy.haveAlreadyTakenColorCard = true;
+			takeFromDrawPileCopy.lastPlayerIndex = takeFromDrawPileCopy.currentPlayerIndex;
 			nextStates.add(takeFromDrawPileCopy);
 		}
 
@@ -441,6 +442,7 @@ public class TicketToRideState implements GameState {
 					state.currentPlayerIndex = state.getNextPlayer();
 				} else {
 					state.haveAlreadyTakenColorCard = true;
+					state.lastPlayerIndex = state.currentPlayerIndex;
 				}
 				nextStates.add(state);
 			}
@@ -453,6 +455,7 @@ public class TicketToRideState implements GameState {
 			final TicketToRideState copy = new TicketToRideState(this);
 			copy.players[copy.currentPlayerIndex].drawThreeTickets(copy.destinationTicketDeck);
 			copy.haveAlreadyDrawnTickets = true;
+			copy.lastPlayerIndex = copy.currentPlayerIndex;
 			nextStates.add(copy);
 		}
 
