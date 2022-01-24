@@ -118,7 +118,6 @@ public class Board {
 
 		while (!queue.isEmpty()) {
 			final String current = queue.poll();
-			System.out.println("current = " + current);
 
 			for (final Connection connection : this.connectionsFromCity.get(current)) {
 				final String neighbor = connection.start.equals(current) ? connection.end : connection.start;
