@@ -300,9 +300,10 @@ public class Player {
 		board.giveOwnershipToPlayer(connection, currentPlayer, numPlayers);
 	}
 
-	public boolean hasCompletedAllKnownTickets(final Board board, final int owner) {
+	public boolean mayDrawTickets(final Board board, final int owner) {
 		for (final DestinationTicket ticket : this.knownDestinationTickets) {
-			if (!board.isCompleteTicket(ticket, owner)) {
+			if (!board.isCompleteTicket(ticket, owner)
+					&& board.getMinConnectionsBetween(ticket.getStart(), ticket.getEnd(), owner) < 1000) {
 				return false;
 			}
 		}

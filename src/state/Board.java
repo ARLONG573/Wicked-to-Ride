@@ -1,10 +1,12 @@
 package state;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.Set;
 
 import data.DestinationTicket;
@@ -69,39 +71,95 @@ public class Board {
 		return connections;
 	}
 
-	public Set<Connection> getReasonableConnectionsForOwner(final Player player, final int owner) {
-		// reasonable is going to mean either connected to its structure OR connected to
-		// a city on one of its tickets
-		final Set<Connection> connections = new HashSet<>();
+	public boolean isReasonableConnectionForOwner(final Connection connection, final Player player, final int owner) {
+		// a useful connection is one that lowers the minimum number of connections
+		// required to completed all known tickets
+		int total = 0;
+		for (final DestinationTicket ticket : player.getKnownDestinationTickets()) {
+			total += this.getMinConnectionsBetween(ticket.getStart(), ticket.getEnd(), owner);
+		}
 
-		for (final Connection possible : this.getPossibleConnectionsForOwner(owner)) {
-			boolean alreadyAdded = false;
+		connection.owner = owner;
+		int newTotal = 0;
+		for (final DestinationTicket ticket : player.getKnownDestinationTickets()) {
+			newTotal += this.getMinConnectionsBetween(ticket.getStart(), ticket.getEnd(), owner);
+		}
 
-			// check tickets
-			for (final DestinationTicket ticket : player.getKnownDestinationTickets()) {
-				if (ticket.getStart().equals(possible.start) || ticket.getEnd().equals(possible.start)
-						|| ticket.getStart().equals(possible.end) || ticket.getEnd().equals(possible.end)) {
+		return newTotal < total;
+	}
 
-					connections.add(possible);
-					alreadyAdded = true;
-					break;
-				}
-			}
+	public int getMinConnectionsBetween(final String start, final String end, final int owner) {
+		// implementation of Dijkstra's algorithm where an open connection has weight 1
+		// and an owned connection has weight 0
 
-			// check structure
-			if (!alreadyAdded) {
-				if (this.playerOwnsCity(possible.start, owner) || this.playerOwnsCity(possible.end, owner)) {
-					connections.add(possible);
-				}
+		final Set<String> allCities = this.connectionsFromCity.keySet();
+
+		// assign initial distance values
+		final Map<String, Integer> dist = new HashMap<>();
+		for (final String city : allCities) {
+			if (city.equals(start)) {
+				dist.put(city, 0);
+			} else {
+				dist.put(city, 1000);
 			}
 		}
 
-		// further reduce options by only considering those that are useful for
-		// completing our tickets
-		//TODO what is a "useful" connection?
-		
-		return connections;
+		// initialize queue
+		final PriorityQueue<String> queue = new PriorityQueue<>(new Comparator<>() {
+			@Override
+			public int compare(final String city1, String city2) {
+				return dist.get(city1).compareTo(dist.get(city2));
+			}
+		});
 
+		for (final String city : allCities) {
+			queue.add(city);
+		}
+
+		while (!queue.isEmpty()) {
+			final String current = queue.poll();
+			System.out.println("current = " + current);
+
+			for (final Connection connection : this.connectionsFromCity.get(current)) {
+				final String neighbor = connection.start.equals(current) ? connection.end : connection.start;
+				if (queue.contains(neighbor)) {
+					int alt = dist.get(current);
+
+					if (connection.owner == -1) {
+						alt += 1;
+					} else if (connection.owner != owner) {
+						alt += 1000;
+					}
+
+					if (alt < dist.get(neighbor)) {
+						dist.put(neighbor, alt);
+						
+						//re-prioritize
+						queue.remove(neighbor);
+						queue.add(neighbor);
+					}
+				}
+			}
+
+			if (current.equals(end)) {
+				return dist.get(end);
+			}
+			
+		}
+
+		return dist.get(end);
+	}
+
+	public Set<Connection> getReasonableConnectionsForOwner(final Player player, final int owner) {
+		final Set<Connection> reasonableConnections = new HashSet<>();
+
+		for (final Connection possible : this.getPossibleConnectionsForOwner(owner)) {
+			if (this.isReasonableConnectionForOwner(possible, player, owner)) {
+				reasonableConnections.add(possible);
+			}
+		}
+
+		return reasonableConnections;
 	}
 
 	public Set<Connection> getForbiddenConnectionsForPlayer(final int player) {

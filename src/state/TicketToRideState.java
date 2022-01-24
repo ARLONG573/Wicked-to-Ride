@@ -448,9 +448,9 @@ public class TicketToRideState implements GameState {
 			}
 		}
 
-		// tickets (only allowed if we've finished all of our tickets first, just to
-		// prevent likely bad plays)
-		if (this.players[this.currentPlayerIndex].hasCompletedAllKnownTickets(this.board, this.currentPlayerIndex)
+		// tickets (only allowed if all tickets are either completed OR not able to be
+		// completed)
+		if (this.players[this.currentPlayerIndex].mayDrawTickets(this.board, this.currentPlayerIndex)
 				&& this.destinationTicketDeck.canDrawThreeTickets()) {
 			final TicketToRideState copy = new TicketToRideState(this);
 			copy.players[copy.currentPlayerIndex].drawThreeTickets(copy.destinationTicketDeck);
@@ -686,9 +686,9 @@ public class TicketToRideState implements GameState {
 			}
 		}
 
-		// tickets (only allowed if we've completed all known tickets, just to prevent
-		// likely bad plays)
-		if (temp.players[temp.currentPlayerIndex].hasCompletedAllKnownTickets(temp.board, temp.currentPlayerIndex)
+		// tickets (only allowed if all tickets are either completed OR not able to be
+		// completed)
+		if (temp.players[temp.currentPlayerIndex].mayDrawTickets(temp.board, temp.currentPlayerIndex)
 				&& temp.destinationTicketDeck.canDrawThreeTickets()) {
 			final TicketToRideState copy = new TicketToRideState(temp);
 			copy.players[copy.currentPlayerIndex].drawThreeTickets(copy.destinationTicketDeck);
