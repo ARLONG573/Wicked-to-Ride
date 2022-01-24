@@ -37,8 +37,7 @@ public class Board {
 		this.connectionsFromCity = new HashMap<>();
 
 		for (final Connection connection : board.allConnections) {
-			final Connection newConnection = new Connection(connection.start, connection.end, connection.length,
-					connection.color, connection.id, connection.owner);
+			final Connection newConnection = new Connection(connection);
 
 			this.allConnections.add(newConnection);
 
@@ -86,7 +85,7 @@ public class Board {
 		}
 		connection.owner = -1;
 
-		return newTotal <= total;
+		return newTotal < total;
 	}
 
 	public int getMinConnectionsBetween(final String start, final String end, final int owner) {
@@ -125,7 +124,9 @@ public class Board {
 				if (queue.contains(neighbor)) {
 					int alt = dist.get(current);
 
-					if (connection.owner == -1) {
+					if (this.forbiddenConnectionsForPlayer.get(owner).contains(connection)) {
+						alt += 1000;
+					} else if (connection.owner == -1) {
 						alt += 1;
 					} else if (connection.owner != owner) {
 						alt += 1000;
@@ -302,7 +303,7 @@ public class Board {
 
 		private int owner;
 
-		private Connection(final String start, final String end, final long length, final String color, final int id,
+		public Connection(final String start, final String end, final long length, final String color, final int id,
 				final int owner) {
 			this.start = start;
 			this.end = end;
