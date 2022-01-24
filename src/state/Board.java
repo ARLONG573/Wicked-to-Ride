@@ -133,8 +133,8 @@ public class Board {
 
 					if (alt < dist.get(neighbor)) {
 						dist.put(neighbor, alt);
-						
-						//re-prioritize
+
+						// re-prioritize
 						queue.remove(neighbor);
 						queue.add(neighbor);
 					}
@@ -144,13 +144,25 @@ public class Board {
 			if (current.equals(end)) {
 				return dist.get(end);
 			}
-			
+
 		}
 
 		return dist.get(end);
 	}
 
 	public Set<Connection> getReasonableConnectionsForOwner(final Player player, final int owner) {
+		// if all tickets are completed, all connections are okay
+		boolean allCompleted = true;
+		for (final DestinationTicket ticket : player.getKnownDestinationTickets()) {
+			if (!this.isCompleteTicket(ticket, owner)) {
+				allCompleted = false;
+				break;
+			}
+		}
+		if (allCompleted) {
+			return this.getPossibleConnectionsForOwner(owner);
+		}
+
 		final Set<Connection> reasonableConnections = new HashSet<>();
 
 		for (final Connection possible : this.getPossibleConnectionsForOwner(owner)) {
