@@ -71,6 +71,11 @@ public class Board {
 	}
 
 	public boolean isReasonableConnectionForOwner(final Connection connection, final Player player, final int owner) {
+		// if you have 12 or less cars, anything goes
+		if (player.getNumCarsRemaining() < 13) {
+			return true;
+		}
+
 		// a useful connection is one that lowers the minimum number of connections
 		// required to completed all known tickets
 		int total = 0;

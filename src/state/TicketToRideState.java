@@ -394,7 +394,10 @@ public class TicketToRideState implements GameState {
 			copy.haveAlreadyDrawnTickets = true;
 			copy.lastPlayerIndex = copy.currentPlayerIndex;
 			nextStates.add(copy);
-			return nextStates;
+
+			if (this.players[this.currentPlayerIndex].getNumCarsRemaining() > 12) {
+				return nextStates;
+			}
 		}
 
 		// train placements
@@ -641,7 +644,12 @@ public class TicketToRideState implements GameState {
 			copy.players[copy.currentPlayerIndex].drawThreeTickets(copy.destinationTicketDeck);
 			copy.haveAlreadyDrawnTickets = true;
 			copy.lastPlayerIndex = copy.currentPlayerIndex;
-			return copy;
+
+			if (temp.players[temp.currentPlayerIndex].getNumCarsRemaining() > 12) {
+				return copy;
+			}
+			
+			nextStates.add(copy);
 		}
 
 		// train placements
