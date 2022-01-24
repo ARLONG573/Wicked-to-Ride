@@ -95,8 +95,21 @@ public class ColorDeck {
 		this.possiblyInDeck.put(color, this.possiblyInDeck.get(color) - 1);
 	}
 
+	private long getNumPossibleCards() {
+		long total = 0;
+		for (final String color : this.possiblyInDeck.keySet()) {
+			total += this.possiblyInDeck.get(color);
+		}
+
+		return total;
+	}
+
 	public void fillUnknownsRandomlyForPlayer(final Player player) {
 		final int numUnknowns = player.getNumUnknownColorCards();
+		if (numUnknowns > this.getNumPossibleCards()) {
+			this.convertDiscardToDraw();
+		}
+
 		for (int i = 0; i < numUnknowns; i++) {
 			// find total possible cards it could be
 			long total = 0;
