@@ -74,13 +74,6 @@ public class DestinationTicketDeck {
 			return;
 		}
 
-		if (player.getNumUnknownDestinationTickets() > this.possiblyInDeck.size()) {
-			this.possiblyInDeck.addAll(this.knownDiscard);
-			this.knownDiscard.clear();
-			this.numCardsInDrawPile += this.numDiscards;
-			this.numDiscards = 0;
-		}
-
 		// the closer they are to completing a ticket, the more likely they are to have
 		// it in their hand
 		final List<DestinationTicket> alreadyCompleted = new ArrayList<>();

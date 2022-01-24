@@ -106,9 +106,6 @@ public class ColorDeck {
 
 	public void fillUnknownsRandomlyForPlayer(final Player player) {
 		final int numUnknowns = player.getNumUnknownColorCards();
-		if (numUnknowns > this.getNumPossibleCards()) {
-			this.convertDiscardToDraw();
-		}
 
 		for (int i = 0; i < numUnknowns; i++) {
 			// find total possible cards it could be
@@ -272,7 +269,7 @@ public class ColorDeck {
 
 	private void convertDiscardToDraw() {
 		for (final String color : this.discard.keySet()) {
-			this.possiblyInDeck.put(color, discard.get(color));
+			this.possiblyInDeck.put(color, this.possiblyInDeck.get(color) + this.discard.get(color));
 			this.numCardsInDrawPile += this.discard.get(color);
 
 			this.discard.put(color, 0L);

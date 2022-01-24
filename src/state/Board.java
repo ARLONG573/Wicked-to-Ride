@@ -86,7 +86,7 @@ public class Board {
 		}
 		connection.owner = -1;
 
-		return newTotal < total;
+		return newTotal <= total;
 	}
 
 	public int getMinConnectionsBetween(final String start, final String end, final int owner) {
