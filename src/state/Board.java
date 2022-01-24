@@ -84,6 +84,7 @@ public class Board {
 		for (final DestinationTicket ticket : player.getKnownDestinationTickets()) {
 			newTotal += this.getMinConnectionsBetween(ticket.getStart(), ticket.getEnd(), owner);
 		}
+		connection.owner = -1;
 
 		return newTotal < total;
 	}
