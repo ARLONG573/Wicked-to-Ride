@@ -152,18 +152,6 @@ public class Board {
 	}
 
 	public Set<Connection> getReasonableConnectionsForOwner(final Player player, final int owner) {
-		// if all tickets are completed, all connections are okay
-		boolean allCompleted = true;
-		for (final DestinationTicket ticket : player.getKnownDestinationTickets()) {
-			if (!this.isCompleteTicket(ticket, owner)) {
-				allCompleted = false;
-				break;
-			}
-		}
-		if (allCompleted) {
-			return this.getPossibleConnectionsForOwner(owner);
-		}
-
 		final Set<Connection> reasonableConnections = new HashSet<>();
 
 		for (final Connection possible : this.getPossibleConnectionsForOwner(owner)) {

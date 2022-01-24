@@ -1,6 +1,7 @@
 package state;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
@@ -383,6 +384,19 @@ public class TicketToRideState implements GameState {
 		// if this is a first turn, make a state for each possible train placement, each
 		// possible color card, and drawing tickets
 
+		// tickets (only allowed if all tickets are either completed OR not able to be
+		// completed)
+		// if this is a reasonable action, always take it
+		if (this.players[this.currentPlayerIndex].mayDrawTickets(this.board, this.currentPlayerIndex)
+				&& this.destinationTicketDeck.canDrawThreeTickets()) {
+			final TicketToRideState copy = new TicketToRideState(this);
+			copy.players[copy.currentPlayerIndex].drawThreeTickets(copy.destinationTicketDeck);
+			copy.haveAlreadyDrawnTickets = true;
+			copy.lastPlayerIndex = copy.currentPlayerIndex;
+			nextStates.add(copy);
+			return nextStates;
+		}
+
 		// train placements
 		final Set<Board.Connection> possibleConnectionsForPlayer = this.board
 				.getReasonableConnectionsForOwner(this.players[this.currentPlayerIndex], this.currentPlayerIndex);
@@ -431,8 +445,15 @@ public class TicketToRideState implements GameState {
 			nextStates.add(takeFromDrawPileCopy);
 		}
 
+		// don't take a face up unless it helps with our tickets
+		final Set<String> reasonableColors = new HashSet<>();
+		for (final Board.Connection connection : possibleConnectionsForPlayer) {
+			reasonableColors.add(connection.getColor());
+		}
+
 		for (final String color : this.colorDeck.getFaceUp().keySet()) {
-			if (this.colorDeck.getFaceUp().get(color) > 0) {
+			if (this.colorDeck.getFaceUp().get(color) > 0 && (color.equals("WILD") || reasonableColors.contains(color)
+					|| reasonableColors.contains("GRAY"))) {
 				final TicketToRideState state = new TicketToRideState(this);
 				state.players[state.currentPlayerIndex].drawFaceUp(color, state.colorDeck);
 
@@ -446,17 +467,6 @@ public class TicketToRideState implements GameState {
 				}
 				nextStates.add(state);
 			}
-		}
-
-		// tickets (only allowed if all tickets are either completed OR not able to be
-		// completed)
-		if (this.players[this.currentPlayerIndex].mayDrawTickets(this.board, this.currentPlayerIndex)
-				&& this.destinationTicketDeck.canDrawThreeTickets()) {
-			final TicketToRideState copy = new TicketToRideState(this);
-			copy.players[copy.currentPlayerIndex].drawThreeTickets(copy.destinationTicketDeck);
-			copy.haveAlreadyDrawnTickets = true;
-			copy.lastPlayerIndex = copy.currentPlayerIndex;
-			nextStates.add(copy);
 		}
 
 		// if next states is somehow still empty, just end the game since there are no
@@ -622,6 +632,18 @@ public class TicketToRideState implements GameState {
 		// if this is a first turn, make a state for each possible train placement, each
 		// possible color card, and drawing tickets
 
+		// tickets (only allowed if all tickets are either completed OR not able to be
+		// completed)
+		// if this is a reasonable action, always take it
+		if (temp.players[temp.currentPlayerIndex].mayDrawTickets(temp.board, temp.currentPlayerIndex)
+				&& temp.destinationTicketDeck.canDrawThreeTickets()) {
+			final TicketToRideState copy = new TicketToRideState(temp);
+			copy.players[copy.currentPlayerIndex].drawThreeTickets(copy.destinationTicketDeck);
+			copy.haveAlreadyDrawnTickets = true;
+			copy.lastPlayerIndex = copy.currentPlayerIndex;
+			return copy;
+		}
+
 		// train placements
 		final Set<Board.Connection> possibleConnectionsForPlayer = temp.board
 				.getReasonableConnectionsForOwner(temp.players[temp.currentPlayerIndex], temp.currentPlayerIndex);
@@ -669,8 +691,15 @@ public class TicketToRideState implements GameState {
 			nextStates.add(takeFromDrawPileCopy);
 		}
 
+		// don't take a face up unless it helps with our tickets
+		final Set<String> reasonableColors = new HashSet<>();
+		for (final Board.Connection connection : possibleConnectionsForPlayer) {
+			reasonableColors.add(connection.getColor());
+		}
+
 		for (final String color : temp.colorDeck.getFaceUp().keySet()) {
-			if (temp.colorDeck.getFaceUp().get(color) > 0) {
+			if (temp.colorDeck.getFaceUp().get(color) > 0 && (color.equals("WILD") || reasonableColors.contains(color)
+					|| reasonableColors.contains("GRAY"))) {
 				final TicketToRideState state = new TicketToRideState(temp);
 				state.players[state.currentPlayerIndex].drawFaceUp(color, state.colorDeck);
 
@@ -684,17 +713,6 @@ public class TicketToRideState implements GameState {
 				}
 				nextStates.add(state);
 			}
-		}
-
-		// tickets (only allowed if all tickets are either completed OR not able to be
-		// completed)
-		if (temp.players[temp.currentPlayerIndex].mayDrawTickets(temp.board, temp.currentPlayerIndex)
-				&& temp.destinationTicketDeck.canDrawThreeTickets()) {
-			final TicketToRideState copy = new TicketToRideState(temp);
-			copy.players[copy.currentPlayerIndex].drawThreeTickets(copy.destinationTicketDeck);
-			copy.haveAlreadyDrawnTickets = true;
-			copy.lastPlayerIndex = copy.currentPlayerIndex;
-			nextStates.add(copy);
 		}
 
 		// if next states is somehow still empty, just end the game since there are no
