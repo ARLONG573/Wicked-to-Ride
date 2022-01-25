@@ -26,6 +26,7 @@ public class TicketToRideState implements GameState {
 	private boolean haveInitialTicketsBeenChosen;
 	private boolean haveAlreadyTakenColorCard;
 	private boolean haveAlreadyDrawnTickets;
+	private int aiPlayerIndex;
 
 	// this is a hack that makes up for the fact that MCTS algorithm computes score
 	// twice
@@ -37,6 +38,7 @@ public class TicketToRideState implements GameState {
 			final ColorDeck colorDeck, final DestinationTicketDeck destinationTicketDeck, final Board board,
 			final long longestRoutePoints, final long globetrotterPoints) {
 
+		this.aiPlayerIndex = aiPlayerIndex;
 		this.players = new Player[numPlayers];
 		for (int i = 0; i < numPlayers; i++) {
 			this.players[i] = new Player(numCarsPerPlayer);
@@ -62,6 +64,7 @@ public class TicketToRideState implements GameState {
 	}
 
 	public TicketToRideState(final TicketToRideState state) {
+		this.aiPlayerIndex = state.aiPlayerIndex;
 		this.players = new Player[state.players.length];
 		for (int i = 0; i < this.players.length; i++) {
 			this.players[i] = new Player(state.players[i]);
@@ -648,7 +651,7 @@ public class TicketToRideState implements GameState {
 			if (temp.players[temp.currentPlayerIndex].getNumCarsRemaining() > 12) {
 				return copy;
 			}
-			
+
 			nextStates.add(copy);
 		}
 
@@ -700,9 +703,16 @@ public class TicketToRideState implements GameState {
 		}
 
 		// don't take a face up unless it helps with our tickets
+		// humans are less predictable, so they can take any color
 		final Set<String> reasonableColors = new HashSet<>();
 		for (final Board.Connection connection : possibleConnectionsForPlayer) {
 			reasonableColors.add(connection.getColor());
+		}
+
+		if (temp.currentPlayerIndex != temp.aiPlayerIndex) {
+			for (final String color : temp.colorDeck.COLORS) {
+				reasonableColors.add(color);
+			}
 		}
 
 		for (final String color : temp.colorDeck.getFaceUp().keySet()) {
