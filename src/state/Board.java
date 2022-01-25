@@ -156,13 +156,20 @@ public class Board {
 		return dist.get(end);
 	}
 
-	public Set<Connection> getReasonableConnectionsForOwner(final Player player, final int owner) {
+	public Set<Connection> getReasonableConnectionsForOwner(final Player player, final int owner, final Player aiPlayer,
+			final int aiPlayerIndex) {
 		final Set<Connection> reasonableConnections = new HashSet<>();
 
 		for (final Connection possible : this.getPossibleConnectionsForOwner(owner)) {
 			if (this.isReasonableConnectionForOwner(possible, player, owner)) {
 				reasonableConnections.add(possible);
 			}
+		}
+
+		// if the player is human, they may try to block our connections
+		if (owner != aiPlayerIndex) {
+			reasonableConnections
+					.addAll(this.getReasonableConnectionsForOwner(aiPlayer, aiPlayerIndex, aiPlayer, aiPlayerIndex));
 		}
 
 		return reasonableConnections;

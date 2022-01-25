@@ -273,8 +273,9 @@ public class TicketToRideState implements GameState {
 			}
 
 			// don't take a face up unless it helps with our tickets
-			final Set<Board.Connection> possibleConnectionsForPlayer = this.board
-					.getReasonableConnectionsForOwner(this.players[this.currentPlayerIndex], this.currentPlayerIndex);
+			final Set<Board.Connection> possibleConnectionsForPlayer = this.board.getReasonableConnectionsForOwner(
+					this.players[this.currentPlayerIndex], this.currentPlayerIndex, this.players[this.aiPlayerIndex],
+					this.aiPlayerIndex);
 
 			final Set<String> reasonableColors = new HashSet<>();
 			for (final Board.Connection connection : possibleConnectionsForPlayer) {
@@ -414,8 +415,9 @@ public class TicketToRideState implements GameState {
 		}
 
 		// train placements
-		final Set<Board.Connection> possibleConnectionsForPlayer = this.board
-				.getReasonableConnectionsForOwner(this.players[this.currentPlayerIndex], this.currentPlayerIndex);
+		final Set<Board.Connection> possibleConnectionsForPlayer = this.board.getReasonableConnectionsForOwner(
+				this.players[this.currentPlayerIndex], this.currentPlayerIndex, this.players[this.aiPlayerIndex],
+				this.aiPlayerIndex);
 
 		final boolean isLastTurn = this.players[this.currentPlayerIndex].getNumCarsRemaining() < 3;
 
@@ -538,7 +540,8 @@ public class TicketToRideState implements GameState {
 			} else {
 				// don't take a face up unless it helps with our tickets
 				final Set<Board.Connection> possibleConnectionsForPlayer = temp.board.getReasonableConnectionsForOwner(
-						temp.players[temp.currentPlayerIndex], temp.currentPlayerIndex);
+						temp.players[temp.currentPlayerIndex], temp.currentPlayerIndex,
+						temp.players[temp.aiPlayerIndex], temp.aiPlayerIndex);
 				for (final Board.Connection connection : possibleConnectionsForPlayer) {
 					reasonableColors.add(connection.getColor());
 				}
@@ -682,8 +685,9 @@ public class TicketToRideState implements GameState {
 		}
 
 		// train placements
-		final Set<Board.Connection> possibleConnectionsForPlayer = temp.board
-				.getReasonableConnectionsForOwner(temp.players[temp.currentPlayerIndex], temp.currentPlayerIndex);
+		final Set<Board.Connection> possibleConnectionsForPlayer = temp.board.getReasonableConnectionsForOwner(
+				temp.players[temp.currentPlayerIndex], temp.currentPlayerIndex, temp.players[temp.aiPlayerIndex],
+				temp.aiPlayerIndex);
 
 		final boolean isLastTurn = temp.players[temp.currentPlayerIndex].getNumCarsRemaining() < 3;
 
