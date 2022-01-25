@@ -272,8 +272,18 @@ public class TicketToRideState implements GameState {
 				nextStates.add(takeFromDrawPileCopy);
 			}
 
+			// don't take a face up unless it helps with our tickets
+			final Set<Board.Connection> possibleConnectionsForPlayer = this.board
+					.getReasonableConnectionsForOwner(this.players[this.currentPlayerIndex], this.currentPlayerIndex);
+
+			final Set<String> reasonableColors = new HashSet<>();
+			for (final Board.Connection connection : possibleConnectionsForPlayer) {
+				reasonableColors.add(connection.getColor());
+			}
+
 			for (final String color : this.colorDeck.getFaceUp().keySet()) {
-				if (!color.equals("WILD") && this.colorDeck.getFaceUp().get(color) > 0) {
+				if (!color.equals("WILD") && this.colorDeck.getFaceUp().get(color) > 0
+						&& (reasonableColors.contains("GRAY") || reasonableColors.contains(color))) {
 					final TicketToRideState state = new TicketToRideState(this);
 					state.players[state.currentPlayerIndex].drawFaceUp(color, state.colorDeck);
 					nextStates.add(state);
@@ -519,8 +529,18 @@ public class TicketToRideState implements GameState {
 				nextStates.add(takeFromDrawPileCopy);
 			}
 
+			// don't take a face up unless it helps with our tickets
+			final Set<Board.Connection> possibleConnectionsForPlayer = temp.board
+					.getReasonableConnectionsForOwner(temp.players[temp.currentPlayerIndex], temp.currentPlayerIndex);
+
+			final Set<String> reasonableColors = new HashSet<>();
+			for (final Board.Connection connection : possibleConnectionsForPlayer) {
+				reasonableColors.add(connection.getColor());
+			}
+
 			for (final String color : temp.colorDeck.getFaceUp().keySet()) {
-				if (!color.equals("WILD") && temp.colorDeck.getFaceUp().get(color) > 0) {
+				if (!color.equals("WILD") && temp.colorDeck.getFaceUp().get(color) > 0
+						&& (reasonableColors.contains("GRAY") || reasonableColors.contains(color))) {
 					final TicketToRideState state = new TicketToRideState(temp);
 					state.players[state.currentPlayerIndex].drawFaceUp(color, state.colorDeck);
 					nextStates.add(state);
