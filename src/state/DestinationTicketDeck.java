@@ -77,10 +77,22 @@ public class DestinationTicketDeck {
 			return;
 		}
 
+		// if the player has built no connections, assign them random tickets
+		if (board.getConnectionsForPlayer(playerIndex).isEmpty()) {
+			final List<DestinationTicket> tickets = new ArrayList<>();
+			tickets.addAll(this.possiblyInDeck);
+
+			while (player.getNumUnknownDestinationTickets() > 0) {
+				final DestinationTicket randomTicket = tickets.remove((int) (Math.random() * tickets.size()));
+				player.convertUnknownDestinationTicketToKnownManually(randomTicket, this);
+			}
+
+			return;
+		}
+
 		// the closer they are to completing a ticket, the more likely they are to have
 		// it in their hand
-		// we will be pessimistic and assume they have the highest scoring routes that
-		// fit each category
+		// ties will be broken by highest score
 		final Comparator<DestinationTicket> comparator = new Comparator<>() {
 			@Override
 			public int compare(final DestinationTicket ticket1, final DestinationTicket ticket2) {
