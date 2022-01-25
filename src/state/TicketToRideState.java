@@ -509,7 +509,7 @@ public class TicketToRideState implements GameState {
 		for (int i = 0; i < temp.players.length; i++) {
 			final Player player = temp.players[i];
 			temp.colorDeck.fillUnknownsRandomlyForPlayer(player);
-			temp.destinationTicketDeck.fillUnknownsForPlayerSmartly(player, temp.board, i);
+			temp.destinationTicketDeck.fillUnknownsForPlayerSmartly(player, temp.board, i, temp.aiPlayerIndex);
 		}
 
 		// replenish the face up with a random card if needed and possible

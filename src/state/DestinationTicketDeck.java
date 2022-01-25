@@ -72,13 +72,15 @@ public class DestinationTicketDeck {
 		return null;
 	}
 
-	public void fillUnknownsForPlayerSmartly(final Player player, final Board board, final int playerIndex) {
+	public void fillUnknownsForPlayerSmartly(final Player player, final Board board, final int playerIndex,
+			final int aiPlayerIndex) {
 		if (player.getNumUnknownDestinationTickets() == 0) {
 			return;
 		}
 
-		// if the player has built no connections, assign them random tickets
-		if (board.getConnectionsForPlayer(playerIndex).isEmpty()) {
+		// if the player has built no connections or is an AI, assign them random
+		// tickets
+		if (playerIndex == aiPlayerIndex || board.getConnectionsForPlayer(playerIndex).isEmpty()) {
 			final List<DestinationTicket> tickets = new ArrayList<>();
 			tickets.addAll(this.possiblyInDeck);
 
