@@ -1,8 +1,11 @@
 package state;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.Set;
 
 import data.DestinationTicket;
@@ -76,54 +79,32 @@ public class DestinationTicketDeck {
 
 		// the closer they are to completing a ticket, the more likely they are to have
 		// it in their hand
-		final List<DestinationTicket> alreadyCompleted = new ArrayList<>();
-		final List<DestinationTicket> bothCitiesClaimed = new ArrayList<>();
-		final List<DestinationTicket> oneCityClaimed = new ArrayList<>();
-		final List<DestinationTicket> noCitiesClaimed = new ArrayList<>();
+		// we will be pessimistic and assume they have the highest scoring routes that
+		// fit each category
+		final Comparator<DestinationTicket> comparator = new Comparator<>() {
+			@Override
+			public int compare(final DestinationTicket ticket1, final DestinationTicket ticket2) {
+				final int result = Integer.compare(
+						board.getMinConnectionsBetween(ticket1.getStart(), ticket1.getEnd(), playerIndex),
+						board.getMinConnectionsBetween(ticket2.getStart(), ticket2.getEnd(), playerIndex));
+
+				if (result != 0) {
+					return result;
+				}
+
+				return -Long.compare(ticket1.getPoints(), ticket2.getPoints());
+			}
+		};
+
+		final Queue<DestinationTicket> sortedTickets = new PriorityQueue<>(comparator);
 
 		for (final DestinationTicket ticket : this.possiblyInDeck) {
-			if (board.isCompleteTicket(ticket, playerIndex)) {
-				alreadyCompleted.add(ticket);
-			} else {
-				final boolean startClaimed = board.playerOwnsCity(ticket.getStart(), playerIndex);
-				final boolean endClaimed = board.playerOwnsCity(ticket.getEnd(), playerIndex);
-
-				if (startClaimed && endClaimed) {
-					bothCitiesClaimed.add(ticket);
-				} else if (startClaimed || endClaimed) {
-					oneCityClaimed.add(ticket);
-				} else {
-					noCitiesClaimed.add(ticket);
-				}
-			}
+			sortedTickets.add(ticket);
 		}
 
 		while (player.getNumUnknownDestinationTickets() > 0) {
-			if (!alreadyCompleted.isEmpty()) {
-				final int randomIndex = (int) (Math.random() * alreadyCompleted.size());
-				final DestinationTicket ticket = alreadyCompleted.remove(randomIndex);
-				player.convertUnknownDestinationTicketToKnownManually(ticket, this);
-				continue;
-			}
-
-			if (!bothCitiesClaimed.isEmpty()) {
-				final int randomIndex = (int) (Math.random() * bothCitiesClaimed.size());
-				final DestinationTicket ticket = bothCitiesClaimed.remove(randomIndex);
-				player.convertUnknownDestinationTicketToKnownManually(ticket, this);
-				continue;
-			}
-
-			if (!oneCityClaimed.isEmpty()) {
-				final int randomIndex = (int) (Math.random() * oneCityClaimed.size());
-				final DestinationTicket ticket = oneCityClaimed.remove(randomIndex);
-				player.convertUnknownDestinationTicketToKnownManually(ticket, this);
-				continue;
-			}
-
-			final int randomIndex = (int) (Math.random() * noCitiesClaimed.size());
-			final DestinationTicket ticket = noCitiesClaimed.remove(randomIndex);
+			final DestinationTicket ticket = sortedTickets.poll();
 			player.convertUnknownDestinationTicketToKnownManually(ticket, this);
-			continue;
 		}
 	}
 
