@@ -303,7 +303,7 @@ public class Player {
 	public boolean mayDrawTickets(final Board board, final int owner) {
 		for (final DestinationTicket ticket : this.knownDestinationTickets) {
 			if (!board.isCompleteTicket(ticket, owner)
-					&& board.getMinConnectionsBetween(ticket.getStart(), ticket.getEnd(), owner) < 1000) {
+					&& board.getMinTrainsBetween(ticket.getStart(), ticket.getEnd(), owner) <= this.numCarsRemaining) {
 				return false;
 			}
 		}

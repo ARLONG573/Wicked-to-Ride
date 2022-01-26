@@ -80,22 +80,85 @@ public class Board {
 		// required to completed all known tickets
 		int total = 0;
 		for (final DestinationTicket ticket : player.getKnownDestinationTickets()) {
-			total += this.getMinConnectionsBetween(ticket.getStart(), ticket.getEnd(), owner);
+			total += this.getMinTrainsBetween(ticket.getStart(), ticket.getEnd(), owner);
 		}
 
 		connection.owner = owner;
 		int newTotal = 0;
 		for (final DestinationTicket ticket : player.getKnownDestinationTickets()) {
-			newTotal += this.getMinConnectionsBetween(ticket.getStart(), ticket.getEnd(), owner);
+			newTotal += this.getMinTrainsBetween(ticket.getStart(), ticket.getEnd(), owner);
 		}
 		connection.owner = -1;
 
-		return newTotal < total;
+		return newTotal + connection.length == total;
+	}
+
+	public int getMinTrainsBetween(final String start, final String end, final int owner) {
+		// implementation of Dijkstra's algorithm where an open connection has weight of
+		// its length and an owned connection has weight 0
+
+		final Set<String> allCities = this.connectionsFromCity.keySet();
+
+		// assign initial distance values
+		final Map<String, Integer> dist = new HashMap<>();
+		for (final String city : allCities) {
+			if (city.equals(start)) {
+				dist.put(city, 0);
+			} else {
+				dist.put(city, 1000);
+			}
+		}
+
+		// initialize queue
+		final PriorityQueue<String> queue = new PriorityQueue<>(new Comparator<>() {
+			@Override
+			public int compare(final String city1, String city2) {
+				return dist.get(city1).compareTo(dist.get(city2));
+			}
+		});
+
+		for (final String city : allCities) {
+			queue.add(city);
+		}
+
+		while (!queue.isEmpty()) {
+			final String current = queue.poll();
+
+			for (final Connection connection : this.connectionsFromCity.get(current)) {
+				final String neighbor = connection.start.equals(current) ? connection.end : connection.start;
+				if (queue.contains(neighbor)) {
+					int alt = dist.get(current);
+
+					if (this.forbiddenConnectionsForPlayer.get(owner).contains(connection)) {
+						alt += 1000;
+					} else if (connection.owner == -1) {
+						alt += connection.length;
+					} else if (connection.owner != owner) {
+						alt += 1000;
+					}
+
+					if (alt < dist.get(neighbor)) {
+						dist.put(neighbor, alt);
+
+						// re-prioritize
+						queue.remove(neighbor);
+						queue.add(neighbor);
+					}
+				}
+			}
+
+			if (current.equals(end)) {
+				return dist.get(end);
+			}
+
+		}
+
+		return dist.get(end);
 	}
 
 	public int getMinConnectionsBetween(final String start, final String end, final int owner) {
-		// implementation of Dijkstra's algorithm where an open connection has weight 1
-		// and an owned connection has weight 0
+		// implementation of Dijkstra's algorithm where an open connection has weight of
+		// 1 and an owned connection has weight 0
 
 		final Set<String> allCities = this.connectionsFromCity.keySet();
 

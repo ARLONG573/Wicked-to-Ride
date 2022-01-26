@@ -531,20 +531,13 @@ public class TicketToRideState implements GameState {
 				nextStates.add(takeFromDrawPileCopy);
 			}
 
+			// don't take a face up unless it helps with our tickets
+			final Set<Board.Connection> possibleConnectionsForPlayer = temp.board.getReasonableConnectionsForOwner(
+					temp.players[temp.currentPlayerIndex], temp.currentPlayerIndex, temp.players[temp.aiPlayerIndex],
+					temp.aiPlayerIndex);
 			final Set<String> reasonableColors = new HashSet<>();
-
-			if (temp.currentPlayerIndex != temp.aiPlayerIndex) {
-				for (final String color : temp.colorDeck.COLORS) {
-					reasonableColors.add(color);
-				}
-			} else {
-				// don't take a face up unless it helps with our tickets
-				final Set<Board.Connection> possibleConnectionsForPlayer = temp.board.getReasonableConnectionsForOwner(
-						temp.players[temp.currentPlayerIndex], temp.currentPlayerIndex,
-						temp.players[temp.aiPlayerIndex], temp.aiPlayerIndex);
-				for (final Board.Connection connection : possibleConnectionsForPlayer) {
-					reasonableColors.add(connection.getColor());
-				}
+			for (final Board.Connection connection : possibleConnectionsForPlayer) {
+				reasonableColors.add(connection.getColor());
 			}
 
 			for (final String color : temp.colorDeck.getFaceUp().keySet()) {
@@ -733,16 +726,9 @@ public class TicketToRideState implements GameState {
 		}
 
 		// don't take a face up unless it helps with our tickets
-		// humans are less predictable, so they can take any color
 		final Set<String> reasonableColors = new HashSet<>();
 		for (final Board.Connection connection : possibleConnectionsForPlayer) {
 			reasonableColors.add(connection.getColor());
-		}
-
-		if (temp.currentPlayerIndex != temp.aiPlayerIndex) {
-			for (final String color : temp.colorDeck.COLORS) {
-				reasonableColors.add(color);
-			}
 		}
 
 		for (final String color : temp.colorDeck.getFaceUp().keySet()) {
@@ -807,6 +793,13 @@ public class TicketToRideState implements GameState {
 					winningPlayers.add(i);
 				}
 			}
+		}
+
+		System.out.println();
+		System.out.println("Ending player = " + this.lastPlayerIndex);
+		for (final Player player : this.players) {
+			System.out.println(player.getScore() + " " + player.getNumCompletedTickets() + "/"
+					+ player.getNumKnownDestinationTickets());
 		}
 
 		return winningPlayers;
