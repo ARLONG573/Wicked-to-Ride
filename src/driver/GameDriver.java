@@ -171,7 +171,7 @@ public class GameDriver {
 		}
 
 		in.close();
-		System.out.println("Winning players: " + gameState.getWinningPlayers());
+
 		System.out.println();
 		System.out.println("Scores:");
 		for (final Player player : gameState.getPlayers()) {
