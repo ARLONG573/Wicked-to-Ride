@@ -670,7 +670,9 @@ public class TicketToRideState implements GameState {
 			copy.haveAlreadyDrawnTickets = true;
 			copy.lastPlayerIndex = copy.currentPlayerIndex;
 
-			if (temp.players[temp.currentPlayerIndex].getNumCarsRemaining() > 6) {
+			if (temp.players[temp.currentPlayerIndex].getNumCarsRemaining() > 6
+					|| (temp.currentPlayerIndex != temp.aiPlayerIndex
+							&& temp.players[temp.currentPlayerIndex].getNumCarsRemaining() > 12)) {
 				return copy;
 			}
 

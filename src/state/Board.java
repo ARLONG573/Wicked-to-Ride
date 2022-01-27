@@ -70,9 +70,11 @@ public class Board {
 		return connections;
 	}
 
-	private boolean isReasonableConnectionForOwner(final Connection connection, final Player player, final int owner) {
+	private boolean isReasonableConnectionForOwner(final Connection connection, final Player player, final int owner,
+			final int aiPlayer) {
 		// if you have 6 or less cars, anything goes
-		if (player.getNumCarsRemaining() < 7) {
+		// humans may end as early as 12 cars left
+		if (player.getNumCarsRemaining() < 7 || (owner != aiPlayer && player.getNumCarsRemaining() < 13)) {
 			return true;
 		}
 
@@ -224,7 +226,7 @@ public class Board {
 		final Set<Connection> reasonableConnections = new HashSet<>();
 
 		for (final Connection possible : this.getPossibleConnectionsForOwner(owner)) {
-			if (this.isReasonableConnectionForOwner(possible, player, owner)) {
+			if (this.isReasonableConnectionForOwner(possible, player, owner, aiPlayerIndex)) {
 				reasonableConnections.add(possible);
 			}
 		}
