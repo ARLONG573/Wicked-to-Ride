@@ -95,15 +95,6 @@ public class ColorDeck {
 		this.possiblyInDeck.put(color, this.possiblyInDeck.get(color) - 1);
 	}
 
-	private long getNumPossibleCards() {
-		long total = 0;
-		for (final String color : this.possiblyInDeck.keySet()) {
-			total += this.possiblyInDeck.get(color);
-		}
-
-		return total;
-	}
-
 	public void fillUnknownsRandomlyForPlayer(final Player player) {
 		final int numUnknowns = player.getNumUnknownColorCards();
 
