@@ -72,9 +72,10 @@ public class Board {
 
 	private boolean isReasonableConnectionForOwner(final Connection connection, final Player player, final int owner,
 			final int aiPlayer) {
-		// if you have 6 or less cars, anything goes
+		// if you have 6 or less cars and finished all tickets, anything goes
 		// humans may end as early as 12 cars left
-		if (player.getNumCarsRemaining() < 7 || (owner != aiPlayer && player.getNumCarsRemaining() < 13)) {
+		if ((player.getNumCarsRemaining() < 7 || (owner != aiPlayer && player.getNumCarsRemaining() < 13))
+				&& player.mayDrawTickets(this, owner)) {
 			return true;
 		}
 
